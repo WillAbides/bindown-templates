@@ -23,6 +23,10 @@ dependencies:
     template: mockgen
     vars:
       version: 1.4.3
+  octo:
+    template: octo
+    vars:
+      version: 0.17.0
   protoc:
     template: protoc
     vars:
@@ -225,6 +229,36 @@ templates:
       dependency:
         vars:
           archivepathsuffix: .exe
+    systems:
+    - darwin/386
+    - darwin/amd64
+    - linux/386
+    - linux/amd64
+    - windows/386
+    - windows/amd64
+  octo:
+    url: https://github.com/octo-cli/octo-cli/releases/download/v{{.version}}/octo-cli_{{.version}}_{{.os}}_{{.arch}}.tar.gz
+    archive_path: octo{{.archivepathsuffix}}
+    bin: octo
+    vars:
+      archivepathsuffix: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivepathsuffix: .exe
+    substitutions:
+      arch:
+        "386": i386
+        amd64: x86_64
+      os:
+        darwin: Darwin
+        linux: Linux
+        windows: Windows
     systems:
     - darwin/386
     - darwin/amd64
@@ -473,6 +507,12 @@ url_checksums:
   https://github.com/myitcv/gobin/releases/download/v0.0.14/openbsd-amd64: 596056c23b0dd31a7e9aae7569ad144c6abf18339d595a65b2b4511ac75582c1
   https://github.com/myitcv/gobin/releases/download/v0.0.14/windows-386: 96531db4408b4c94899490f4082fb39762d8050d2bebde8be8be12046e3bc89a
   https://github.com/myitcv/gobin/releases/download/v0.0.14/windows-amd64: 0a72ae30e27a50d3f966992e6d0d60ac7df12f17d2249bab8f54a3bc40eed00e
+  https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Darwin_i386.tar.gz: 95969b3a171e57d06a1d4aa0544b58c21ac10288e01761191173d4411766c31f
+  https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Darwin_x86_64.tar.gz: b3df6b15265aa68788a5028089b53049e708ed3e9b258364dbf730726143d351
+  https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Linux_i386.tar.gz: 59eb0abbe75901e039f5ffc6d38599e548a0dfa4a1b04be0375f146ffe58e1d9
+  https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Linux_x86_64.tar.gz: 424a222607987d5086c15133dbf2f60da0654f18e836a046c4df6d7c2de4dcd5
+  https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Windows_i386.tar.gz: f4a79c53be2936468730661537cdb15ea0ee6a78c274279ce5e46667fdbd6ba8
+  https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Windows_x86_64.tar.gz: 46cd576008024c105e329057f45b9a6d719777a2ccbc60a083f07eae4aed3ee0
   https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.darwin.386.tar.gz: 51b70c78f5bc750a7809dda2a9d06aafdd2a36f8cbcc2ec9b2334299b843d0f8
   https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.darwin.amd64.tar.gz: ccb615cde8be3c77f73674aaa34752fe2c7eca3ee389c585fddbe8e014092302
   https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.linux.386.tar.gz: 4fb17a31e423f9332849176bc553229c880b36ff7a6e3845fec618bdcefabffd
