@@ -15,6 +15,10 @@ dependencies:
     template: gobin
     vars:
       version: 0.0.14
+  gofumpt:
+    template: gofumpt
+    vars:
+      version: 0.2.0
   golangci-lint:
     template: golangci-lint
     vars:
@@ -200,6 +204,30 @@ templates:
     - netbsd/arm
     - openbsd/386
     - openbsd/amd64
+    - windows/386
+    - windows/amd64
+  gofumpt:
+    url: https://github.com/mvdan/gofumpt/releases/download/v{{.version}}/gofumpt_v{{.version}}_{{.os}}_{{.arch}}{{.suffix}}
+    archive_path: gofumpt_v{{.version}}_{{.os}}_{{.arch}}{{.suffix}}
+    bin: gofumpt{{.suffix}}
+    vars:
+      suffix: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          suffix: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/386
+    - linux/amd64
+    - linux/arm
+    - linux/arm64
     - windows/386
     - windows/amd64
   golangci-lint:
@@ -703,6 +731,14 @@ url_checksums:
   https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_openbsd_amd64: 2a0a7f379ff59b32e950c8e0f418d72ed7bf74f1fcad5a4fc200db5051bebaa3
   https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_windows_386.exe: 64750ce3fb7c614eac7e46d6ac347afe056c630941c85fd43c8f8bd3c98b5782
   https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_windows_amd64.exe: 0307ca4eea66918fdca78fbc480fa9a4d0fa6ecf5aecb63b0408d620215cb709
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_darwin_amd64: aa2c54cbe73618b76b0841bb2e48c4b83563833905fabfeffabd1f26ea15ce1f
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_darwin_arm64: fcafeedb2b64402cabdb738e2e5577f21cb1547b6956d2f37abf8d055d907d05
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_linux_386: d13a8b4a6a5033787475e1bcd586eb6305d8c97110878c43ae1dff19a39ad534
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_linux_amd64: 3112bd66606c2f15ef44443f7f98af6985c8d84d348adad4bd89c6a6519d6eb4
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_linux_arm: a15a0ac7728868f2827fd87161b9a4220d66bc235365b0b7a17e9841a17e7760
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_linux_arm64: 887c98ec5f71f9c7126a994286dad361b1a76a1196ebee9bd9820e84ba234fe2
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_windows_386.exe: 4b22f9665717ba044f5bd5e95db9372e300fd6ec1bb5427ab9b71bff3a2812e8
+  https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_windows_amd64.exe: e1cc29d1fd0d780dab8eb9d71010b11a0fd86fb44d6c29dd4fb1d5b4c6092dfb
   https://github.com/myitcv/gobin/releases/download/v0.0.14/darwin-386: e61bd124629ff53d76fafc2d4ae13051b71340d9c66b1167dc95e8d5b4173805
   https://github.com/myitcv/gobin/releases/download/v0.0.14/darwin-amd64: 08db3d50eea308b475d591d43efc160c7c44f4666da4f2fd103864a9d038b230
   https://github.com/myitcv/gobin/releases/download/v0.0.14/freebsd-386: 7032a3f6341a3e6ea80d812b7a32e88d286efe3760e7f77ef1bf79674594f94c
