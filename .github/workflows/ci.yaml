@@ -1,0 +1,11 @@
+on:
+  push:
+  workflow_dispatch:
+
+name: ci
+
+jobs:
+  validate-all:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: script/validate-all
