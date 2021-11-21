@@ -6,7 +6,7 @@ CDPATH="" cd -- "$(dirname -- "$(dirname -- "$0")")"
 
 if [ ! -f ./bin/bindown ]; then
   mkdir -p ./bin
-  sh -c "$(curl -sfL https://github.com/WillAbides/bindown/releases/download/v3.3.3/bootstrap-bindown.sh)"
+  sh -c "$(curl -sfL https://github.com/WillAbides/bindown/releases/download/v3.5.1/bootstrap-bindown.sh)"
 fi
 
 exec bin/bindown "$@"

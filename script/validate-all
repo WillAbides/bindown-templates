@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+CDPATH="" cd -- "$(dirname -- "$(dirname -- "$0")")"
+
+pids=()
+
+for dep in $(script/bindown dependency list); do
+    script/bindown validate "$dep" &
+    pids+=($!)
+done
+
+exit_code=0
+
+for pid in "${pids[@]}"; do
+  wait "$pid" || exit_code=1
+done
+
+exit $exit_code

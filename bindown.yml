@@ -2,7 +2,7 @@ dependencies:
   go:
     template: go
     vars:
-      version: 1.14.2
+      version: 1.17.2
   go-test2action:
     template: go-test2action
     vars:
@@ -14,11 +14,11 @@ dependencies:
   golangci-lint:
     template: golangci-lint
     vars:
-      version: 1.24.0
+      version: 1.43.0
   goreleaser:
     template: goreleaser
     vars:
-      version: 0.131.1
+      version: 1.0.0
   jq:
     template: jq
     vars:
@@ -26,7 +26,7 @@ dependencies:
   mockgen:
     template: mockgen
     vars:
-      version: 1.4.3
+      version: 1.6.0
   octo:
     template: octo
     vars:
@@ -34,15 +34,15 @@ dependencies:
   protoc:
     template: protoc
     vars:
-      version: 3.11.4
+      version: 3.19.1
   protoc-gen-go:
     template: protoc-gen-go
     vars:
-      version: 1.21.0
+      version: 1.27.1
   prototool:
     template: prototool
     vars:
-      version: 1.9.0
+      version: 1.10.0
   semver-next:
     template: semver-next
     vars:
@@ -50,15 +50,15 @@ dependencies:
   shellcheck:
     template: shellcheck
     vars:
-      version: 0.7.1
+      version: 0.8.0
   skeema:
     template: skeema
     vars:
-      version: 1.4.2
+      version: 1.6.0
   yq:
     template: yq
     vars:
-      version: 3.3.0
+      version: 4.14.2
 templates:
   go:
     url: https://dl.google.com/go/go{{.version}}.{{.os}}-{{.arch}}{{.urlsuffix}}
@@ -88,6 +88,7 @@ templates:
           urlsuffix: .zip
     systems:
     - darwin/amd64
+    - darwin/arm64
     - linux/386
     - linux/amd64
     - linux/arm64
@@ -112,8 +113,17 @@ templates:
       dependency:
         vars:
           archivepathsuffix: .exe
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     systems:
     - darwin/amd64
+    - darwin/arm64
     - linux/386
     - linux/amd64
     - windows/386
@@ -124,6 +134,15 @@ templates:
     bin: gobin
     required_vars:
     - version
+    overrides:
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     systems:
     - darwin/386
     - darwin/amd64
@@ -159,8 +178,8 @@ templates:
           archivepathsuffix: .exe
           urlsuffix: .zip
     systems:
-    - darwin/386
     - darwin/amd64
+    - darwin/arm64
     - linux/386
     - linux/amd64
     - linux/arm64
@@ -189,6 +208,12 @@ templates:
         vars:
           archivepathsuffix: .exe
           urlsuffix: .zip
+    - matcher:
+        os:
+        - darwin
+      dependency:
+        vars:
+          arch: all
     substitutions:
       arch:
         "386": i386
@@ -199,6 +224,7 @@ templates:
         windows: Windows
     systems:
     - darwin/amd64
+    - darwin/arm64
     - linux/386
     - linux/amd64
     - windows/386
@@ -217,6 +243,7 @@ templates:
         - darwin
         arch:
         - amd64
+        - arm64
       dependency:
         url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64
         archive_path: jq-osx-amd64
@@ -236,6 +263,7 @@ templates:
     - linux/386
     - linux/amd64
     - darwin/amd64
+    - darwin/arm64
     - windows/386
     - windows/amd64
   mockgen:
@@ -254,8 +282,8 @@ templates:
         vars:
           archivepathsuffix: .exe
     systems:
-    - darwin/386
     - darwin/amd64
+    - darwin/arm64
     - linux/386
     - linux/amd64
     - windows/386
@@ -275,6 +303,14 @@ templates:
       dependency:
         vars:
           archivepathsuffix: .exe
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     substitutions:
       arch:
         "386": i386
@@ -286,6 +322,7 @@ templates:
     systems:
     - darwin/386
     - darwin/amd64
+    - darwin/arm64
     - linux/386
     - linux/amd64
     - windows/386
@@ -314,6 +351,14 @@ templates:
       dependency:
         url: https://github.com/protocolbuffers/protobuf/releases/download/v{{.version}}/protoc-{{.version}}-win32.zip
         archive_path: bin/protoc.exe
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     substitutions:
       arch:
         "386": x86_32
@@ -324,30 +369,59 @@ templates:
         darwin: osx
     systems:
     - darwin/amd64
+    - darwin/arm64
     - linux/amd64
-    - linux/s390x
     - linux/ppcle
     - linux/386
     - windows/amd64
     - windows/386
   protoc-gen-go:
-    url: https://github.com/protocolbuffers/protobuf-go/releases/download/v{{.version}}/protoc-gen-go.v{{.version}}.{{.os}}.{{.arch}}.tar.gz
+    url: https://github.com/protocolbuffers/protobuf-go/releases/download/v{{.version}}/protoc-gen-go.v{{.version}}.{{.os}}.{{.arch}}{{.urlsuffix}}
+    archive_path: protoc-gen-go{{.archivepathsuffix}}
     bin: protoc-gen-go
+    vars:
+      archivepathsuffix: ""
+      urlsuffix: .tar.gz
     required_vars:
     - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivepathsuffix: .exe
+          urlsuffix: .zip
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     systems:
     - windows/386
     - windows/amd64
     - linux/386
     - linux/amd64
-    - darwin/386
     - darwin/amd64
+    - darwin/arm64
   prototool:
     url: https://github.com/uber/prototool/releases/download/v{{.version}}/prototool-{{.os}}-{{.arch}}.tar.gz
     archive_path: prototool/bin/prototool
     bin: prototool
     required_vars:
     - version
+    overrides:
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     substitutions:
       arch:
         amd64: x86_64
@@ -356,6 +430,7 @@ templates:
         linux: Linux
     systems:
     - darwin/amd64
+    - darwin/arm64
     - linux/amd64
   semver-next:
     url: https://github.com/WillAbides/semver-next/releases/download/v{{.version}}/semver-next_{{.version}}_{{.os}}_{{.arch}}.tar.gz
@@ -372,9 +447,18 @@ templates:
       dependency:
         vars:
           archivepathsuffix: .exe
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     systems:
     - darwin/386
     - darwin/amd64
+    - darwin/arm64
     - linux/386
     - linux/amd64
     - windows/386
@@ -391,12 +475,21 @@ templates:
         - windows
       dependency:
         url: https://github.com/koalaman/shellcheck/releases/download/v{{.version}}/shellcheck-v{{.version}}.zip
-        archive_path: shellcheck-v{{.version}}.exe
+        archive_path: shellcheck.exe
+    - matcher:
+        os:
+        - darwin
+        arch:
+        - arm64
+      dependency:
+        vars:
+          arch: amd64
     substitutions:
       arch:
         amd64: x86_64
     systems:
     - darwin/amd64
+    - darwin/arm64
     - linux/amd64
     - windows/amd64
   skeema:
@@ -411,8 +504,9 @@ templates:
     systems:
     - linux/amd64
     - darwin/amd64
+    - darwin/arm64
   yq:
-    url: https://github.com/mikefarah/yq/releases/download/{{.version}}/yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
+    url: https://github.com/mikefarah/yq/releases/download/v{{.version}}/yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
     archive_path: yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
     bin: yq
     vars:
@@ -427,7 +521,6 @@ templates:
         vars:
           archivepathsuffix: .exe
     systems:
-    - darwin/386
     - darwin/amd64
     - freebsd/386
     - freebsd/amd64
@@ -450,17 +543,18 @@ templates:
     - windows/386
     - windows/amd64
 url_checksums:
-  https://dl.google.com/go/go1.14.2.darwin-amd64.tar.gz: e0db81f890bb253552b3fd783fccbc2cdda02552295cb305e75984eef1c1e2b9
-  https://dl.google.com/go/go1.14.2.freebsd-386.tar.gz: 7b8eccc27bf0a6a57999c1d30447ab61be19509a244ac3617bc4d1797eecb555
-  https://dl.google.com/go/go1.14.2.freebsd-amd64.tar.gz: b9a26f5e2443898b54d7778d6861df70e8342d33a74bd7e02cf1105c4144ec05
-  https://dl.google.com/go/go1.14.2.linux-386.tar.gz: cab5f51e6ffb616c6ee963c3d0650ca4e3c4108307c44f2baf233fcb8ff098f6
-  https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz: 6272d6e940ecb71ea5636ddb5fab3933e087c1356173c61f4a803895e947ebb3
-  https://dl.google.com/go/go1.14.2.linux-arm64.tar.gz: bb6d22fe5806352c3d0826676654e09b6e41eb1af52e8d506d3fa85adf7f8d88
-  https://dl.google.com/go/go1.14.2.linux-armv6l.tar.gz: eb4550ba741506c2a4057ea4d3a5ad7ed5a887de67c7232f1e4795464361c83c
-  https://dl.google.com/go/go1.14.2.linux-ppc64le.tar.gz: 48c22268c81ced9084a43bbe2c1596d3e636b5560b30a32434a7f15e561de160
-  https://dl.google.com/go/go1.14.2.linux-s390x.tar.gz: 501cc919648c9d85b901963303c5061ea6814c80f0d35fda9e62980d3ff58cf4
-  https://dl.google.com/go/go1.14.2.windows-386.zip: 76beccad98b6d3f8de935e5c9dbd69934cca1baa45b880965cdcf2779df56524
-  https://dl.google.com/go/go1.14.2.windows-amd64.zip: 1b5a60b3bbaa81106d5ee03499b5734ec093c6a255abf9a6a067f0f497a57916
+  https://dl.google.com/go/go1.17.2.darwin-amd64.tar.gz: 7914497a302a132a465d33f5ee044ce05568bacdb390ab805cb75a3435a23f94
+  https://dl.google.com/go/go1.17.2.darwin-arm64.tar.gz: ce8771bd3edfb5b28104084b56bbb532eeb47fbb7769c3e664c6223712c30904
+  https://dl.google.com/go/go1.17.2.freebsd-386.tar.gz: 8cea5b8d1f8e8cbb58069bfed58954c71c5b1aca2f3c857765dae83bf724d0d7
+  https://dl.google.com/go/go1.17.2.freebsd-amd64.tar.gz: c96e57218fb03e74d683ad63b1684d44c89d5e5b994f36102b33dce21b58499a
+  https://dl.google.com/go/go1.17.2.linux-386.tar.gz: 8617f2e40d51076983502894181ae639d1d8101bfbc4d7463a2b442f239f5596
+  https://dl.google.com/go/go1.17.2.linux-amd64.tar.gz: f242a9db6a0ad1846de7b6d94d507915d14062660616a61ef7c808a76e4f1676
+  https://dl.google.com/go/go1.17.2.linux-arm64.tar.gz: a5a43c9cdabdb9f371d56951b14290eba8ce2f9b0db48fb5fc657943984fd4fc
+  https://dl.google.com/go/go1.17.2.linux-armv6l.tar.gz: 04d16105008230a9763005be05606f7eb1c683a3dbf0fbfed4034b23889cb7f2
+  https://dl.google.com/go/go1.17.2.linux-ppc64le.tar.gz: 12e2dc7e0ffeebe77083f267ef6705fec1621cdf2ed6489b3af04a13597ed68d
+  https://dl.google.com/go/go1.17.2.linux-s390x.tar.gz: c4b2349a8d11350ca038b8c57f3cc58dc0b31284bcbed4f7fca39aeed28b4a51
+  https://dl.google.com/go/go1.17.2.windows-386.zip: 8a85257a351996fdf045fe95ed5fdd6917dd48636d562dd11dedf193005a53e0
+  https://dl.google.com/go/go1.17.2.windows-amd64.zip: fa6da0b829a66f5fab7e4e312fd6aa1b2d8f045c7ecee83b3d00f6fe5306759a
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_darwin_amd64.tar.gz: 8cbb8eecdc257c0c92bc784fdad349e4d4bcd9c541485f6ea5f495c9ebe66718
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_linux_386.tar.gz: 35c2ffe073a7d9c9bdd4d14186fcb5d6f594794b7133f5157db388c208d37c65
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_linux_amd64.tar.gz: 4b45f44f339f5a0139b7a82267fabb47a4685ac183f5f41b5121c080ca94ca1e
@@ -472,55 +566,54 @@ url_checksums:
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_linux_amd64.tar.gz: 6317c36bec63158038381e8878601151ae996310fef58306f70cb03f1b46ef7f
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_windows_386.tar.gz: b8341ed458930d4ee6302033c7aba6245f31d655da9970c60e1b91ab7419f710
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_windows_amd64.tar.gz: 573ea65ef3b40442626fbb19d07880bb4929e7b12fd7161e41732a03f23b2c95
-  https://github.com/golang/mock/releases/download/v1.4.3/mock_1.4.3_darwin_386.tar.gz: 394dde07ea021bc85fd4d7b6ec12f0d6a3289a71924755ea7ea08bafee513769
-  https://github.com/golang/mock/releases/download/v1.4.3/mock_1.4.3_darwin_amd64.tar.gz: e9358415e26f710a6d559342f8c4e1cf5befc41b8146106a79947f4d152c9324
-  https://github.com/golang/mock/releases/download/v1.4.3/mock_1.4.3_linux_386.tar.gz: 6c65c4f2f2ba029d60d38868f09c2196fc26bf231a6ba3c739a8d722ddfe54f3
-  https://github.com/golang/mock/releases/download/v1.4.3/mock_1.4.3_linux_amd64.tar.gz: cf2b1497584844d8f5479f915c3174418ee8c0f1ca693a90ac691713463bd320
-  https://github.com/golang/mock/releases/download/v1.4.3/mock_1.4.3_windows_386.tar.gz: 122f184c6f2b14dfaeb645d9d5aeccd34267d0701e328498f2fefb10b9065e99
-  https://github.com/golang/mock/releases/download/v1.4.3/mock_1.4.3_windows_amd64.tar.gz: ea2a2c089059003d677899f9f168b7dac67521efccdd42a244d93091b5b04f81
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-darwin-386.tar.gz: 7e854a70d449fe77b7a91583ec88c8603eb3bf96c45d52797dc4ba3f2f278dbe
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-darwin-amd64.tar.gz: f05af56f15ebbcf77663a8955d1e39009b584ce8ea4c5583669369d80353a113
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-freebsd-386.tar.gz: a1ed66353b8ceb575d78db3051491bce3ac1560e469a9bc87e8554486fec7dfe
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-freebsd-amd64.tar.gz: b0096796c0ffcd6c350a2ec006100e7ef5f0597b43a204349d4f997273fb32a7
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-linux-386.tar.gz: ff488423db01a0ec8ffbe4e1d65ef1be6a8d5e6d7930cf380ce8aaf714125470
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-linux-amd64.tar.gz: 241ca454102e909de04957ff8a5754c757cefa255758b3e1fba8a4533d19d179
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-linux-arm64.tar.gz: e245df27cec3827aef9e7afbac59e92816978ee3b64f84f7b88562ff4b2ac225
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-linux-mips64.tar.gz: 8cb1bc1e63d8f0d9b71fcb10b38887e1646a6b8a120ded2e0cd7c3284528f633
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-linux-mips64le.tar.gz: c9c2867380e85628813f1f7d1c3cfc6c6f7931e89bea86f567ff451b8cdb6654
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-linux-ppc64le.tar.gz: 35d6d5927e19f0577cf527f0e4441dbb37701d87e8cf729c98a510fce397fbf7
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-linux-s390x.tar.gz: 2feb97fa61c934aa3eba9bc104ab5dd8fb946791d58e64060e8857e800eeae0b
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-windows-386.zip: a041a6e6a61c9ff3dbe58673af13ea00c76bcd462abede0ade645808e97cdd6d
-  https://github.com/golangci/golangci-lint/releases/download/v1.24.0/golangci-lint-1.24.0-windows-amd64.zip: aeaa5498682246b87d0b77ece283897348ea03d98e816760a074058bfca60b2a
-  https://github.com/goreleaser/goreleaser/releases/download/v0.131.1/goreleaser_Darwin_x86_64.tar.gz: 32a4ffedbe6058f6c90391da7eda960156ee3bc6b84d4e2884c1daf10366948a
-  https://github.com/goreleaser/goreleaser/releases/download/v0.131.1/goreleaser_Linux_i386.tar.gz: 6fafdcbb52723a6a733d2f37d0f6d9b49e8ab6492df5542a2a3d4613833c7547
-  https://github.com/goreleaser/goreleaser/releases/download/v0.131.1/goreleaser_Linux_x86_64.tar.gz: 47fefac2e449ec7bae741986fceb1fbd04ed135e14a72898d702de6b889d3a0d
-  https://github.com/goreleaser/goreleaser/releases/download/v0.131.1/goreleaser_Windows_i386.zip: 6e5fafcd2a578f9ef14ac02260390a5be7f7a348d96eca530100bc790be14c18
-  https://github.com/goreleaser/goreleaser/releases/download/v0.131.1/goreleaser_Windows_x86_64.zip: 5f317de2edc1eb714b73fe8eedfbf9d917b749a84b17f30db8eb956a4da0f6d4
-  https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.darwin.x86_64.tar.xz: b080c3b659f7286e27004aa33759664d91e15ef2498ac709a452445d47e3ac23
-  https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.linux.x86_64.tar.xz: 64f17152d96d7ec261ad3086ed42d18232fcb65148b44571b564d688269d36c8
-  https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.zip: 1763f8f4a639d39e341798c7787d360ed79c3d68a1cdbad0549c9c0767a75e98
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_darwin_386: da9c4190be22e5dabad9fad358c6355cfdcac601241b6e52decf94ad6d692ff1
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_darwin_amd64: 33178f687608446d1d7db327f75d102355ba14b77759931acac18f2c9f252a91
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_freebsd_386: 9bd9080b77ac78df6978a86bdaefe202adc668f6b1deca138bdb4718caa5a450
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_freebsd_amd64: 61af50fee1a0d386d6b8c251cb90b2f2addb6c4f74cac2d42b61a86a1d63626e
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_freebsd_arm: 9c12c3a7742a927c21c683ef6466d76ac71cb31175c927ee20054657e0d067ad
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_386: 2105f6a3835928e4358691a87d9d8af57ddee860e1d495e8be5f370bdb6327e0
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_amd64: e70e482e7ddb9cf83b52f5e83b694a19e3aaf36acf6b82512cbe66e41d569201
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_arm: 5e823c82ac91b6177ab3e0533c9bd0cbfe2519b6c28a6e43373c8f0f25bb6887
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_arm64: 6f75de6446fd5dbfb654e48418b59c34cbd7f3a58260101c467880b3b1a04bb5
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_mips: 3d5406af2851711b95c6cd757c015f1ac2de3d68a1f5af46c390152437e78487
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_mips64: 8bf89b4d6638d2cd5aad6e8e9277b1ab2aa3a8d0fe8033aee7d72b883a4c5fce
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_mips64le: 0cc18c7af1e31489a9701b58af6c7698d993648a4e98560b2300817a4b0022ce
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_mipsle: 044c47e77e11e247393d1264a53a0075d944bf84bc0e2f1917987005278cb329
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_ppc64: 10c71afd5d9c1a0330c97f8af365ddecb0c9c1bfec01489e68d3b638c140018e
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_linux_s390x: acc0a3e5e5b05a94ee22c20f2027c41d72d615b3228c1bf33d7c964207dc6bb4
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_netbsd_386: 3d2daf0c7acee9cacc8b83f1e9fe8d355fcbd3215d791c29947503fbf71c0200
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_netbsd_amd64: 70c65e0873682a3154346d20a1dee5f40cd3cece2b1bd07d4ed3b4c8be84811a
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_netbsd_arm: e6e9a140abb6ec7f1cf90d0e447187e88f84e0bfea32377f0e5b2bef394d7562
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_openbsd_386: 0bc46de2edd1b3ba520c3e0839708e48ff231baf2708b062317ca1534140623c
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_openbsd_amd64: 20c75aab500e9a1bd0433a34ca057f66faa666b5b258dbdd2f4f3ed6fbab85cd
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_windows_386.exe: b563f69fdc8078f4f8feb95907d868beaf945efbcee8ba2a601a220a20bf491a
-  https://github.com/mikefarah/yq/releases/download/3.3.0/yq_windows_amd64.exe: 9137dd05ffe568ea8438411e426ed039cfbfb317339f335c778cb53919f28277
+  https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_darwin_amd64.tar.gz: 938649db27055ec85bede32ccb95ff82f82af3c90a084ee52687a92066bcca92
+  https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_darwin_arm64.tar.gz: 67a4a597dd759e186e17400cbc273be99c8cffc590335381134b3e933b409c83
+  https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_linux_386.tar.gz: 5c956c808a1c1dc2161bdcf91818e658291b6629449592148851cf6db283c5e8
+  https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_linux_amd64.tar.gz: c73e117943739df5dd89d63fed6e80cb783852a0cc42abc3359d708c2e125b78
+  https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_windows_386.tar.gz: e4102b9eca337b0e3705ade4ff7e258340b419e5b38be04b5d240b955d2cb3f8
+  https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_windows_amd64.tar.gz: 12f760cc521b45d0726de11512ed04aea2424d067312f39c926f96b085002590
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-darwin-amd64.tar.gz: 5971ed73d25767b2b955a694e59c7381d56df46e3681a93e067c601d0d6cffad
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-darwin-arm64.tar.gz: d0c69713b675ee09212273c2136a0d1b30203ddfc1c611a1a4fd5bfa90f9e457
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-freebsd-386.tar.gz: e93a63ee2aa9a8ab89f4a579bc7c4dc27322eb01169c8f0b6e7bd62aa67c7704
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-freebsd-amd64.tar.gz: 7e1ab0d0808b4b91caae6e0c6536abc20bd309923e8c98ad554fba6c066d4957
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-linux-386.tar.gz: 2c98fc0d6bc2376693b5c372421b7e68c3986c12ae0f277127b441003d24a8a2
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-linux-amd64.tar.gz: f3515cebec926257da703ba0a2b169e4a322c11dc31a8b4656b50a43e48877f4
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-linux-arm64.tar.gz: e21c681735faf4efd4086f95d5b49904b0bbbe510dd2058058047a8dbfaee546
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-linux-mips64.tar.gz: 7ebe6b70b2d07b96675c5742c860699b5acf8abdf0f120257a01b5b1f68abb80
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-linux-mips64le.tar.gz: d90eab70783567107e8b0b07fa3df7b6572c181d38b393a2391ac2a815c661e8
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-linux-ppc64le.tar.gz: 996a3d1eef45e87ef79e33d375213b8f33cf7396be5bdc5a03384435e89ddc78
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-linux-s390x.tar.gz: b96814f2f6ad9ab14f59779373e435b28abe6d82e59479a29c1bab67bb69a39d
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-windows-386.zip: 6055d72661566702faa5be8a128561700e7a1c6a5990740145222c8be0bae1e6
+  https://github.com/golangci/golangci-lint/releases/download/v1.43.0/golangci-lint-1.43.0-windows-amd64.zip: 5e671027474c2fdc8b5533d492b8373da70f4968724ff10cf4dcbef1d58a2f57
+  https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Darwin_all.tar.gz: 8708f2febcb888fd10a4369f47d37c51cc656a7da8c6dfc0d740a0c2f701ecb0
+  https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Linux_i386.tar.gz: bdc4db46d54a6b00823a07d226239fdc0c52b21878eeb2e548e0a97966e4cf00
+  https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Linux_x86_64.tar.gz: 304fc638ef7b4138a0d680e25ab6019636a42f79c4b0e2e93abd7c42d1629967
+  https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Windows_i386.zip: 18d0fcda9ce74d2af3cee165845190978de270e021a80deaafa1550e82598e77
+  https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Windows_x86_64.zip: eee50e95e2c6442aa9a267dcfd9d76372a455f6d68dc7b5baf3c2c618e61787c
+  https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.darwin.x86_64.tar.xz: e065d4afb2620cc8c1d420a9b3e6243c84ff1a693c1ff0e38f279c8f31e86634
+  https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz: ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a
+  https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.zip: 2a616cbb5b15aec8238f22c0d62dede1b6d155798adc45ff4d0206395a8a5833
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_darwin_amd64: c2361d7fc6193a963dd2acb729f575ee78f07b074f2c7250921bb6698d378480
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_freebsd_386: e7f6d4b0f890d31802498ddb072b3d93921c24e335ba07d01bc9830db9dda06b
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_freebsd_amd64: caa61daf0f60a6ef237d785dae1724b01db7765122a7b5953e79fd037ce685f2
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_freebsd_arm: 4465905d2fba23e61030f7dfc49033b7db99f4e2051806ed1df00987cb61971d
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_386: 89248de5a9a4268e0105e570f3eddf2d6a0bf4c1d53ae8be4b88d4d08669e2c9
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_amd64: dd2f8e4e711b434606495c16d3ffb6c33f47c5c02c72afb63b55b3741d9ef8c8
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_arm: 89227f0f52f87b8fd9646d6889d2193b153d21dc527f332d08236ab6fedd415b
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_arm64: 0be6ef0883c4e95e0a229eaf70dadb37a2383e8d75b398afdfb60648302d1593
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_mips: f2d4961f20253b4b9a55001ff972b76d2819b02c8131c3772c372b014fb0c4f4
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_mips64: 9d21cb9b1cf775ea04d8f4e00991cf0b5b3a5e481b26a1ab4d14fb452763fb25
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_mips64le: 88575129c0a7a8cad65d7a3a1b0714ade23a6d7e40ad3aafb8f0930af623ce81
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_mipsle: c7372753801f4bc50864e470ac4458e789c9ae09dcf51e3c59fc22896809a753
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_ppc64: 5199c6d697fee2f12517ea7d2c624acdbd186e7f0ac8441d174bc98213ad29dc
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_linux_s390x: 8b6ecfd928f87c3418648c7283f7892090004db33d67424962ad97bcf93cf1f8
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_netbsd_386: 145203264f2a8707faa038298b1a557cc590018bf6837aceedcf9cb9f9f06ada
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_netbsd_amd64: c541f9a2efe86547d81ba187973acc2b625104624e4659bb46cad8cd3b24f618
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_netbsd_arm: d41496012349dfa1b6e2c58a5724f84476c1d10f0aa5f4c79b858f4d4ba9c19e
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_openbsd_386: d4cb9f2c520c3505bf9a06517a0f49c57658baf6fff25b48016136de03658fda
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_openbsd_amd64: 2a0a7f379ff59b32e950c8e0f418d72ed7bf74f1fcad5a4fc200db5051bebaa3
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_windows_386.exe: 64750ce3fb7c614eac7e46d6ac347afe056c630941c85fd43c8f8bd3c98b5782
+  https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_windows_amd64.exe: 0307ca4eea66918fdca78fbc480fa9a4d0fa6ecf5aecb63b0408d620215cb709
   https://github.com/myitcv/gobin/releases/download/v0.0.14/darwin-386: e61bd124629ff53d76fafc2d4ae13051b71340d9c66b1167dc95e8d5b4173805
   https://github.com/myitcv/gobin/releases/download/v0.0.14/darwin-amd64: 08db3d50eea308b475d591d43efc160c7c44f4666da4f2fd103864a9d038b230
   https://github.com/myitcv/gobin/releases/download/v0.0.14/freebsd-386: 7032a3f6341a3e6ea80d812b7a32e88d286efe3760e7f77ef1bf79674594f94c
@@ -542,25 +635,24 @@ url_checksums:
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Linux_x86_64.tar.gz: 424a222607987d5086c15133dbf2f60da0654f18e836a046c4df6d7c2de4dcd5
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Windows_i386.tar.gz: f4a79c53be2936468730661537cdb15ea0ee6a78c274279ce5e46667fdbd6ba8
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Windows_x86_64.tar.gz: 46cd576008024c105e329057f45b9a6d719777a2ccbc60a083f07eae4aed3ee0
-  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.darwin.386.tar.gz: 51b70c78f5bc750a7809dda2a9d06aafdd2a36f8cbcc2ec9b2334299b843d0f8
-  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.darwin.amd64.tar.gz: ccb615cde8be3c77f73674aaa34752fe2c7eca3ee389c585fddbe8e014092302
-  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.linux.386.tar.gz: 4fb17a31e423f9332849176bc553229c880b36ff7a6e3845fec618bdcefabffd
-  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.linux.amd64.tar.gz: 23d32f081a7d417ed607fec32dbb44ef0007ab1e3c118a0c56deb993058ae815
-  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.windows.386.tar.gz: b5c36cd347851d53c3b426d6c333e7470d4872e1bfbac70e8f0faef35ba34ef7
-  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.21.0/protoc-gen-go.v1.21.0.windows.amd64.tar.gz: 71d032badc6c0dab9ad3efecaf097f7a31f5e82a809841388aa635782c2bab11
-  https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-ppcle_64.zip: ceee4c842fa02f641ed18691be290efcdd8f3922a19033bef567c1a11a6701a0
-  https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-s390x_64.zip: 75efe299935a72e42cf849f1c8dcd431a7412db2cd5c25426c005934badac588
-  https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_32.zip: 418732a06d47c4b1a6892347a8d231c45ee3daf1a590bd828e1598d92f97373a
-  https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip: 6d0f18cd84b918c7b3edd0203e75569e0c8caecb1367bbbe409b45e28514f5be
-  https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-osx-x86_64.zip: 8c6af11e1058efe953830ecb38324c0e0fd2fb67df3891896d138c535932e7db
-  https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-win32.zip: 703a9ecbff4f8018d1122d90b17d0a453dcdd32b4d19cfaa66e8b6c6a4891a20
-  https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protoc-3.11.4-win64.zip: 93d006549a4b87fbc0a2e931c248e83c75a6b8d5318575c4a29521b7ed3e736d
-  https://github.com/skeema/skeema/releases/download/v1.4.2/skeema_1.4.2_linux_amd64.tar.gz: 7f0e68970a516dde1f49927c8898a9063db3c036e5e1208c6f84e59ead5ca0b5
-  https://github.com/skeema/skeema/releases/download/v1.4.2/skeema_1.4.2_mac_amd64.tar.gz: 218e0a8a6b6cf20d5dd1231345b7b61aa1e3efa15e849f1fa525eadb64105e8e
+  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.27.1/protoc-gen-go.v1.27.1.darwin.amd64.tar.gz: 45ecaa31f84037bc095c39dbffe278dc8be4deee4b67672024264cec9085931f
+  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.27.1/protoc-gen-go.v1.27.1.linux.386.tar.gz: 9b3d1f3cda1ff82977f8bff0ed291b05405f35dafce4251f7f9d6b73d8813474
+  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.27.1/protoc-gen-go.v1.27.1.linux.amd64.tar.gz: 6430664808683d7f5768b6d96294a691b3e018d2023734b6f4d262b8f79ea7d7
+  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.27.1/protoc-gen-go.v1.27.1.windows.386.zip: ceb4776a7a3af8d11f68836edc34c14b049e3ee19006739731a3fdda5a0ef816
+  https://github.com/protocolbuffers/protobuf-go/releases/download/v1.27.1/protoc-gen-go.v1.27.1.windows.amd64.zip: 981b0595e275c45583c381d512c368fa663b665d3a3242313e062d188292cf6c
+  https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-ppcle_64.zip: 51fb06447920d7737b1f4a013dd273334384eb9b31ff1bf452b46f2baf0c1e71
+  https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-x86_32.zip: ba9683d85db7d9f44965b38a5c0b05368d0e02ee21f24de3d29627f095d42de3
+  https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-linux-x86_64.zip: 4b18a69b3093432ee0531bc9bf3c4114f81bde1670ade2875f694180ac8bd7f6
+  https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-osx-x86_64.zip: 9dbe9128eeba41a969d1e87207e97a3884f68718d84ec5debc92115d5a957286
+  https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win32.zip: ce84bd3d3287555ec99da21a7e6e91c7385b64b018343f04b76337933209b69f
+  https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip: 7e904214696702285aa5b503a86fa38a14c9eeb0f3fe10ff3115a74e3a90dae8
+  https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_linux_amd64.tar.gz: 21fa960e4bdfbe34ddefa6b0d09eb5d21586a0afddfd1ee4a52277705e93e866
+  https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_mac_amd64.tar.gz: f2b868ca238620a9a9da7f3d7b457c8778bdcf615399ba1e35b6e7a2cd62fbd5
+  https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_mac_arm64.tar.gz: 4617b722cd8e38899a82d11d5ceb1536859e44bda718a6270d34fb1b8808eb25
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux32: 319af6123aaccb174f768a1a89fb586d471e891ba217fe518f81ef05af51edd9
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64: af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64: 5c0a0a3ea600f302ee458b30317425dd9632d1ad8882259fcaf4e9b868b2b1ef
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win32.exe: 0012cb4c0eb6eaf97b842e676e423a69a8fea95055d93830551b4a5a54494bd8
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe: a51d36968dcbdeabb3142c6f5cf9b401a65dc3a095f3144bd0c118d5bb192753
-  https://github.com/uber/prototool/releases/download/v1.9.0/prototool-Darwin-x86_64.tar.gz: 60e97f06eb2c29449e213ce92b45445f8039539981adb51a123e4f4da5669b29
-  https://github.com/uber/prototool/releases/download/v1.9.0/prototool-Linux-x86_64.tar.gz: 144dfe0070818f56ec5bc3c43d8fe8c837b5dbcb4d383b2a24046ebd485d5c0f
+  https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Darwin-x86_64.tar.gz: 98ff342d0cd307ab136652bd61cd174f4b7a1fe0eb0cb23ea35885ef84f14857
+  https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Linux-x86_64.tar.gz: 50e53589b95e2435e26de01de8eac6af6ae6980b1cacf1e0ad319b7644f16b3b
