@@ -73,6 +73,10 @@ dependencies:
     template: skeema
     vars:
       version: 1.6.0
+  sqlc:
+    template: sqlc
+    vars:
+      version: 1.11.0
   sqlcgetters:
     template: sqlcgetters
     vars:
@@ -608,6 +612,34 @@ templates:
     - linux/amd64
     - darwin/amd64
     - darwin/arm64
+  sqlc:
+    url: https://github.com/kyleconroy/sqlc/releases/download/v{{.version}}/sqlc_{{.version}}_{{.os}}_{{.arch}}.tar.gz
+    archive_path: sqlc{{.archivepathsuffix}}
+    bin: sqlc
+    vars:
+      archivepathsuffix: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivepathsuffix: .exe
+    - matcher:
+        os:
+          - darwin
+        arch:
+          - arm64
+      dependency:
+        vars:
+          arch: amd64
+    systems:
+    - linux/amd64
+    - darwin/amd64
+    - darwin/arm64
+    - windows/amd64
   sqlcgetters:
     url: https://github.com/WillAbides/sqlcgetters/releases/download/v{{.version}}/sqlcgetters_{{.version}}_{{.os}}_{{.arch}}.tar.gz
     required_vars:
@@ -729,6 +761,10 @@ url_checksums:
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.darwin.x86_64.tar.xz: e065d4afb2620cc8c1d420a9b3e6243c84ff1a693c1ff0e38f279c8f31e86634
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz: ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.zip: 2a616cbb5b15aec8238f22c0d62dede1b6d155798adc45ff4d0206395a8a5833
+  https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_darwin_amd64.tar.gz: f5d5a800bf29dd3175cbec47ad7f424bf5fb887fc9922bd141749982f78bd6ac
+  https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_linux_amd64.tar.gz: e8d97abff71c7b964e582c16869953940f37506097ee2bc26835f7bf3a2cc9ac
+  https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_windows_amd64.tar.gz: 1f18384b83887dae2cdff66dcc26e53d3992eb1d8240a57d87e65bb4723adf76
+  https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_windows_amd64.zip: 98123322fd42fcebfe745d1ef0497efedba3a6c01a49063f99e8a4fe4b27afbe
   https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_darwin_amd64: c2361d7fc6193a963dd2acb729f575ee78f07b074f2c7250921bb6698d378480
   https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_freebsd_386: e7f6d4b0f890d31802498ddb072b3d93921c24e335ba07d01bc9830db9dda06b
   https://github.com/mikefarah/yq/releases/download/v4.14.2/yq_freebsd_amd64: caa61daf0f60a6ef237d785dae1724b01db7765122a7b5953e79fd037ce685f2
