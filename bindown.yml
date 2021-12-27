@@ -77,10 +77,6 @@ dependencies:
     template: sqlc
     vars:
       version: 1.11.0
-  sqlcgetters:
-    template: sqlcgetters
-    vars:
-      version: 0.0.0
   yq:
     template: yq
     vars:
@@ -640,16 +636,6 @@ templates:
     - darwin/amd64
     - darwin/arm64
     - windows/amd64
-  sqlcgetters:
-    url: https://github.com/WillAbides/sqlcgetters/releases/download/v{{.version}}/sqlcgetters_{{.version}}_{{.os}}_{{.arch}}.tar.gz
-    required_vars:
-    - version
-    systems:
-    - darwin/amd64
-    - darwin/arm64
-    - linux/386
-    - linux/amd64
-    - linux/arm64
   yq:
     url: https://github.com/mikefarah/yq/releases/download/v{{.version}}/yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
     archive_path: yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
@@ -711,11 +697,6 @@ url_checksums:
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_linux_amd64.tar.gz: 6317c36bec63158038381e8878601151ae996310fef58306f70cb03f1b46ef7f
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_windows_386.tar.gz: b8341ed458930d4ee6302033c7aba6245f31d655da9970c60e1b91ab7419f710
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_windows_amd64.tar.gz: 573ea65ef3b40442626fbb19d07880bb4929e7b12fd7161e41732a03f23b2c95
-  https://github.com/WillAbides/sqlcgetters/releases/download/v0.0.0/sqlcgetters_0.0.0_darwin_amd64.tar.gz: a6e76dbfe67911344381c41d65e45c6d93bd65846676f46369b78a4b42332162
-  https://github.com/WillAbides/sqlcgetters/releases/download/v0.0.0/sqlcgetters_0.0.0_darwin_arm64.tar.gz: 4436917417e4bc0fb8047d8695216d6a5d5b2a404e447927a07953bad8e72861
-  https://github.com/WillAbides/sqlcgetters/releases/download/v0.0.0/sqlcgetters_0.0.0_linux_386.tar.gz: 949ef4c6b88d663d9d0ea3c88e55d4c13b0b6cebaf2465f48e6d0809b2f02f9e
-  https://github.com/WillAbides/sqlcgetters/releases/download/v0.0.0/sqlcgetters_0.0.0_linux_amd64.tar.gz: 045ad12137a6c37e815096bd1928dc439e0c0b4503d494b9bfd89831d1419eb0
-  https://github.com/WillAbides/sqlcgetters/releases/download/v0.0.0/sqlcgetters_0.0.0_linux_arm64.tar.gz: 73c60e32a8d6afe9298c9c0a2c0e7569011bd5a36f909225e43cac0c0c931780
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/buf-Darwin-arm64: 9ea62047c4b27f8ba076726de4f36f94985c9914bdd7d79f3273aa17dfe70d11
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/buf-Darwin-x86_64: 426554e6c79be0cd2680cb22bfe157b7398d714f3dc7ddd799fa06f1d07681cf
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/buf-Linux-aarch64: fce46750e93e84fbd1c0e9bf5f72331dbcb07f23ec61c1f39f0007ab3387d1ab
