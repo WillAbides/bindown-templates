@@ -44,14 +44,12 @@ dependencies:
     vars:
       version: 3.19.1
   protoc-gen-buf-breaking:
-    template: buf
+    template: protoc-gen-buf-breaking
     vars:
-      binname: protoc-gen-buf-breaking
       version: 1.0.0-rc8
   protoc-gen-buf-lint:
-    template: buf
+    template: protoc-gen-buf-lint
     vars:
-      binname: protoc-gen-buf-lint
       version: 1.0.0-rc8
   protoc-gen-go:
     template: protoc-gen-go
@@ -463,33 +461,13 @@ templates:
     - windows/amd64
     - windows/386
   protoc-gen-buf-breaking:
-    url: https://github.com/bufbuild/buf/releases/download/v{{.version}}/protoc-gen-buf-breaking-{{.os}}-{{.arch}}{{.extension}}
-    archive_path: protoc-gen-buf-breaking-{{.os}}-{{.arch}}{{.extension}}
+    template: buf
     vars:
-      extension: ""
-    required_vars:
-    - version
-    overrides:
-    - matcher:
-        os:
-        - windows
-      dependency:
-        vars:
-          extension: .exe
-    substitutions:
-      arch:
-        amd64: x86_64
-      os:
-        darwin: Darwin
-        linux: Linux
-        windows: Windows
-    systems:
-    - darwin/amd64
-    - darwin/arm64
-    - linux/aarch64
-    - linux/amd64
-    - windows/amd64
-    - windows/arm64
+      binname: protoc-gen-buf-breaking
+  protoc-gen-buf-lint:
+    template: buf
+    vars:
+      binname: protoc-gen-buf-lint
   protoc-gen-go:
     url: https://github.com/protocolbuffers/protobuf-go/releases/download/v{{.version}}/protoc-gen-go.v{{.version}}.{{.os}}.{{.arch}}{{.urlsuffix}}
     archive_path: protoc-gen-go{{.archivepathsuffix}}

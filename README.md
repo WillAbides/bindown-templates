@@ -18,6 +18,7 @@ mockgen
 octo
 protoc
 protoc-gen-buf-breaking
+protoc-gen-buf-lint
 protoc-gen-go
 prototool
 semver-next
