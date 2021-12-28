@@ -11,10 +11,6 @@ dependencies:
     template: go-test2action
     vars:
       version: 0.0.0
-  gobin:
-    template: gobin
-    vars:
-      version: 0.0.14
   gofumpt:
     template: gofumpt
     vars:
@@ -175,37 +171,6 @@ templates:
     - darwin/arm64
     - linux/386
     - linux/amd64
-    - windows/386
-    - windows/amd64
-  gobin:
-    url: https://github.com/myitcv/gobin/releases/download/v{{.version}}/{{.os}}-{{.arch}}
-    archive_path: '{{.os}}-{{.arch}}'
-    bin: gobin
-    required_vars:
-    - version
-    overrides:
-    - matcher:
-        arch:
-        - arm64
-        os:
-        - darwin
-      dependency:
-        vars:
-          arch: amd64
-    systems:
-    - darwin/386
-    - darwin/amd64
-    - freebsd/386
-    - freebsd/amd64
-    - freebsd/arm
-    - linux/386
-    - linux/amd64
-    - linux/arm
-    - netbsd/386
-    - netbsd/amd64
-    - netbsd/arm
-    - openbsd/386
-    - openbsd/amd64
     - windows/386
     - windows/amd64
   gofumpt:
@@ -771,21 +736,6 @@ url_checksums:
   https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_linux_arm64: 887c98ec5f71f9c7126a994286dad361b1a76a1196ebee9bd9820e84ba234fe2
   https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_windows_386.exe: 4b22f9665717ba044f5bd5e95db9372e300fd6ec1bb5427ab9b71bff3a2812e8
   https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_windows_amd64.exe: e1cc29d1fd0d780dab8eb9d71010b11a0fd86fb44d6c29dd4fb1d5b4c6092dfb
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/darwin-386: e61bd124629ff53d76fafc2d4ae13051b71340d9c66b1167dc95e8d5b4173805
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/darwin-amd64: 08db3d50eea308b475d591d43efc160c7c44f4666da4f2fd103864a9d038b230
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/freebsd-386: 7032a3f6341a3e6ea80d812b7a32e88d286efe3760e7f77ef1bf79674594f94c
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/freebsd-amd64: 2cfb9077c7e0b32a103ac287334550e5d23f950713d14807a4449aa7a37c55aa
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/freebsd-arm: 4491b59be5fc728282358c3394920a6fc240dc629059411f635c1da8efc271ab
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/linux-386: fcb58f6f036861b2b8e94260674d932a41d873f208bd5fbf5352915819e0797c
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/linux-amd64: 5bc800e8be7eaefcb86780786c38b75243082685a17ceea3c2235e06b8259151
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/linux-arm: d0eeb93bdd765c24837be4b8bfd3c4ad8efa7c8ee8eefd0d196f82b7c884946e
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/netbsd-386: c63e506839ac3d49821517aaf900aafd2cae5324f5df18097bec426daae4c872
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/netbsd-amd64: bfa4f2ec77da431bf90a8fdbae024b621f064b5b304bf29a8cb4f9ec047cff1b
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/netbsd-arm: 50208ad51a494aa0385f46e9ca8f41869fe6d7b51c5dd58af54ec2ea3f17b4f4
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/openbsd-386: 5849e2c3d6207f88ceee351739f598c6509bd9cd03c69f0c4366ef4fe65cf30f
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/openbsd-amd64: 596056c23b0dd31a7e9aae7569ad144c6abf18339d595a65b2b4511ac75582c1
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/windows-386: 96531db4408b4c94899490f4082fb39762d8050d2bebde8be8be12046e3bc89a
-  https://github.com/myitcv/gobin/releases/download/v0.0.14/windows-amd64: 0a72ae30e27a50d3f966992e6d0d60ac7df12f17d2249bab8f54a3bc40eed00e
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Darwin_i386.tar.gz: 95969b3a171e57d06a1d4aa0544b58c21ac10288e01761191173d4411766c31f
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Darwin_x86_64.tar.gz: b3df6b15265aa68788a5028089b53049e708ed3e9b258364dbf730726143d351
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Linux_i386.tar.gz: 59eb0abbe75901e039f5ffc6d38599e548a0dfa4a1b04be0375f146ffe58e1d9

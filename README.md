@@ -15,7 +15,6 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 buf
 go
 go-test2action
-gobin
 gofumpt
 golangci-lint
 goreleaser
