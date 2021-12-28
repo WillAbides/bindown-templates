@@ -26,7 +26,7 @@ dependencies:
   goreleaser:
     template: goreleaser
     vars:
-      version: 1.0.0
+      version: 1.2.2
   jq:
     template: jq
     vars:
@@ -123,10 +123,10 @@ templates:
     - version
     overrides:
     - matcher:
-        os:
-        - linux
         arch:
         - arm
+        os:
+        - linux
       dependency:
         vars:
           arch: armv6l
@@ -165,10 +165,10 @@ templates:
         vars:
           archivepathsuffix: .exe
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -187,10 +187,10 @@ templates:
     - version
     overrides:
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -286,9 +286,21 @@ templates:
     - matcher:
         os:
         - darwin
+        version:
+        - 0.182 - 1.1
       dependency:
         vars:
           arch: all
+    - matcher:
+        arch:
+        - arm64
+        os:
+        - darwin
+        version:
+        - < 0.155
+      dependency:
+        vars:
+          arch: amd64
     substitutions:
       arch:
         "386": i386
@@ -314,11 +326,11 @@ templates:
     - version
     overrides:
     - matcher:
-        os:
-        - darwin
         arch:
         - amd64
         - arm64
+        os:
+        - darwin
       dependency:
         url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64
         archive_path: jq-osx-amd64
@@ -379,10 +391,10 @@ templates:
         vars:
           archivepathsuffix: .exe
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -411,26 +423,26 @@ templates:
     - version
     overrides:
     - matcher:
-        os:
-        - windows
         arch:
         - amd64
+        os:
+        - windows
       dependency:
         url: https://github.com/protocolbuffers/protobuf/releases/download/v{{.version}}/protoc-{{.version}}-win64.zip
         archive_path: bin/protoc.exe
     - matcher:
-        os:
-        - windows
         arch:
         - "386"
+        os:
+        - windows
       dependency:
         url: https://github.com/protocolbuffers/protobuf/releases/download/v{{.version}}/protoc-{{.version}}-win32.zip
         archive_path: bin/protoc.exe
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -496,10 +508,10 @@ templates:
           archivepathsuffix: .exe
           urlsuffix: .zip
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -518,10 +530,10 @@ templates:
     - version
     overrides:
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -551,10 +563,10 @@ templates:
         vars:
           archivepathsuffix: .exe
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -580,10 +592,10 @@ templates:
         url: https://github.com/koalaman/shellcheck/releases/download/v{{.version}}/shellcheck-v{{.version}}.zip
         archive_path: shellcheck.exe
     - matcher:
-        os:
-        - darwin
         arch:
         - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -624,10 +636,10 @@ templates:
         vars:
           archivepathsuffix: .exe
     - matcher:
-        os:
-          - darwin
         arch:
-          - arm64
+        - arm64
+        os:
+        - darwin
       dependency:
         vars:
           arch: amd64
@@ -739,6 +751,12 @@ url_checksums:
   https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Linux_x86_64.tar.gz: 304fc638ef7b4138a0d680e25ab6019636a42f79c4b0e2e93abd7c42d1629967
   https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Windows_i386.zip: 18d0fcda9ce74d2af3cee165845190978de270e021a80deaafa1550e82598e77
   https://github.com/goreleaser/goreleaser/releases/download/v1.0.0/goreleaser_Windows_x86_64.zip: eee50e95e2c6442aa9a267dcfd9d76372a455f6d68dc7b5baf3c2c618e61787c
+  https://github.com/goreleaser/goreleaser/releases/download/v1.2.2/goreleaser_Darwin_arm64.tar.gz: 06ddcef94cb922f0297541669bdca0a91de94e4c79e9f1ceb939a866c9fabf22
+  https://github.com/goreleaser/goreleaser/releases/download/v1.2.2/goreleaser_Darwin_x86_64.tar.gz: 05dc936038167d6d00e00bac91c6b67d2a54826f68e488014f8f3c0826d8846b
+  https://github.com/goreleaser/goreleaser/releases/download/v1.2.2/goreleaser_Linux_i386.tar.gz: b14b842046bf14df64940b03313f91a430a8282c40b6fd020da8bd6324838a05
+  https://github.com/goreleaser/goreleaser/releases/download/v1.2.2/goreleaser_Linux_x86_64.tar.gz: 4ef68da9014df222c94ccefa02b01fdf96d414c1c775dbee5fadda53cd74ff71
+  https://github.com/goreleaser/goreleaser/releases/download/v1.2.2/goreleaser_Windows_i386.zip: 68772cdc8abe6de56cc752db9148ba4515b536e4de3b88c418f5eed8998151da
+  https://github.com/goreleaser/goreleaser/releases/download/v1.2.2/goreleaser_Windows_x86_64.zip: d3af8fd988a11d15c1a54bb83e20ac4b852cb3a9d1314bf9598aa533f44411a3
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.darwin.x86_64.tar.xz: e065d4afb2620cc8c1d420a9b3e6243c84ff1a693c1ff0e38f279c8f31e86634
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz: ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.zip: 2a616cbb5b15aec8238f22c0d62dede1b6d155798adc45ff4d0206395a8a5833
