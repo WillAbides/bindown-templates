@@ -23,6 +23,10 @@ dependencies:
     template: goreleaser
     vars:
       version: 1.2.2
+  helm:
+    template: helm
+    vars:
+      version: 3.10.2
   jq:
     template: jq
     vars:
@@ -278,6 +282,32 @@ templates:
     - linux/386
     - linux/amd64
     - windows/386
+    - windows/amd64
+  helm:
+    url: https://get.helm.sh/helm-v{{.version}}-{{.os}}-{{.arch}}{{.urlsuffix}}
+    archive_path: '{{.os}}-{{.arch}}/helm{{.archivepathsuffix}}'
+    vars:
+      archivepathsuffix: ""
+      urlsuffix: .tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivepathsuffix: .exe
+          urlsuffix: .zip
+    systems:
+    - darwin/arm64
+    - darwin/amd64
+    - linux/amd64
+    - linux/arm64
+    - linux/arm
+    - linux/386
+    - linux/ppc64le
+    - linux/s390x
     - windows/amd64
   jq:
     url: https://github.com/stedolan/jq/releases/download/jq-{{.version}}/jq-{{.os}}{{.arch}}{{.extension}}
@@ -641,6 +671,15 @@ url_checksums:
   https://dl.google.com/go/go1.17.2.linux-s390x.tar.gz: c4b2349a8d11350ca038b8c57f3cc58dc0b31284bcbed4f7fca39aeed28b4a51
   https://dl.google.com/go/go1.17.2.windows-386.zip: 8a85257a351996fdf045fe95ed5fdd6917dd48636d562dd11dedf193005a53e0
   https://dl.google.com/go/go1.17.2.windows-amd64.zip: fa6da0b829a66f5fab7e4e312fd6aa1b2d8f045c7ecee83b3d00f6fe5306759a
+  https://get.helm.sh/helm-v3.10.2-darwin-amd64.tar.gz: e889960e4c1d7e2dfdb91b102becfaf22700cb86dc3e3553d9bebd7bab5a3803
+  https://get.helm.sh/helm-v3.10.2-darwin-arm64.tar.gz: 460441eea1764ca438e29fa0e38aa0d2607402f753cb656a4ab0da9223eda494
+  https://get.helm.sh/helm-v3.10.2-linux-386.tar.gz: ac9cbef2ec1237e2723ee8d3a92d1c4525a2da7cecc11336ba67de9bb6b473f0
+  https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz: 2315941a13291c277dac9f65e75ead56386440d3907e0540bf157ae70f188347
+  https://get.helm.sh/helm-v3.10.2-linux-arm.tar.gz: 25af344f46348958baa1c758cdf3b204ede3ddc483be1171ed3738d47efd0aae
+  https://get.helm.sh/helm-v3.10.2-linux-arm64.tar.gz: 57fa17b6bb040a3788116557a72579f2180ea9620b4ee8a9b7244e5901df02e4
+  https://get.helm.sh/helm-v3.10.2-linux-ppc64le.tar.gz: 53a578b84155d31c3e62dd93a88586b75e876dae82c7912c895ee5a574fa6209
+  https://get.helm.sh/helm-v3.10.2-linux-s390x.tar.gz: 33cb4a3382bea6bcd7eb7f385dd08941bdc84d0020345951eb467fbc8f5ccb60
+  https://get.helm.sh/helm-v3.10.2-windows-amd64.zip: f1a3190adecc26270bbef4f3ab2d1a56509f9d8df95413cdd6e3151f6f367862
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_darwin_amd64.tar.gz: 8cbb8eecdc257c0c92bc784fdad349e4d4bcd9c541485f6ea5f495c9ebe66718
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_linux_386.tar.gz: 35c2ffe073a7d9c9bdd4d14186fcb5d6f594794b7133f5157db388c208d37c65
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_linux_amd64.tar.gz: 4b45f44f339f5a0139b7a82267fabb47a4685ac183f5f41b5121c080ca94ca1e
