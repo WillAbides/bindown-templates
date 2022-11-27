@@ -708,15 +708,15 @@ templates:
     archive_path: stern{{.archivepathsuffix}}
     vars:
       archivepathsuffix: ""
-    overrides:
-      - matcher:
-          os:
-            - windows
-        dependency:
-          vars:
-            archivepathsuffix: .exe
     required_vars:
     - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivepathsuffix: .exe
     systems:
     - darwin/amd64
     - darwin/arm64

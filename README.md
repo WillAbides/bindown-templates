@@ -18,7 +18,11 @@ go-test2action
 gofumpt
 golangci-lint
 goreleaser
+helm
+helmfile
 jq
+k8s-aws-iam-authenticator
+kustomize
 mockgen
 octo
 protoc
@@ -30,6 +34,7 @@ semver-next
 shellcheck
 skeema
 sqlc
+stern
 yq
 ```
 <!--- end usage output --->
