@@ -1,6 +1,6 @@
 dependencies:
   aws-iam-authenticator:
-    template: k8s-aws-iam-authenticator
+    template: aws-iam-authenticator
     vars:
       version: 0.5.7
   buf:
@@ -96,6 +96,27 @@ dependencies:
     vars:
       version: 4.14.2
 templates:
+  aws-iam-authenticator:
+    url: https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v{{.version}}/aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
+    archive_path: aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
+    bin: aws-iam-authenticator
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm64
+    - windows/amd64
   buf:
     url: https://github.com/bufbuild/buf/releases/download/v{{.version}}/{{.binname}}-{{.os}}-{{.arch}}{{.extension}}
     archive_path: '{{.binname}}-{{.os}}-{{.arch}}{{.extension}}'
@@ -383,27 +404,6 @@ templates:
     - darwin/amd64
     - darwin/arm64
     - windows/386
-    - windows/amd64
-  k8s-aws-iam-authenticator:
-    url: https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v{{.version}}/aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
-    archive_path: aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
-    bin: aws-iam-authenticator
-    vars:
-      extension: ""
-    required_vars:
-    - version
-    overrides:
-    - matcher:
-        os:
-        - windows
-      dependency:
-        vars:
-          extension: .exe
-    systems:
-    - darwin/amd64
-    - darwin/arm64
-    - linux/amd64
-    - linux/arm64
     - windows/amd64
   kustomize:
     url: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv{{.version}}/kustomize_v{{.version}}_{{.os}}_{{.arch}}.tar.gz
