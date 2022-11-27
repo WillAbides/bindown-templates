@@ -27,10 +27,18 @@ dependencies:
     template: helm
     vars:
       version: 3.10.2
+  helmfile:
+    template: helmfile
+    vars:
+      version: 0.143.5
   jq:
     template: jq
     vars:
       version: "1.6"
+  kustomize:
+    template: kustomize
+    vars:
+      version: 4.5.6
   mockgen:
     template: mockgen
     vars:
@@ -309,6 +317,28 @@ templates:
     - linux/ppc64le
     - linux/s390x
     - windows/amd64
+  helmfile:
+    url: https://github.com/roboll/helmfile/releases/download/v{{.version}}/helmfile_{{.os}}_{{.arch}}{{.extension}}
+    archive_path: helmfile_{{.os}}_{{.arch}}{{.extension}}
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/386
+    - linux/amd64
+    - linux/arm64
+    - windows/386
+    - windows/amd64
   jq:
     url: https://github.com/stedolan/jq/releases/download/jq-{{.version}}/jq-{{.os}}{{.arch}}{{.extension}}
     archive_path: jq-{{.os}}{{.arch}}{{.extension}}
@@ -346,6 +376,29 @@ templates:
     - darwin/arm64
     - windows/386
     - windows/amd64
+  kustomize:
+    url: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv{{.version}}/kustomize_v{{.version}}_{{.os}}_{{.arch}}.tar.gz
+    archive_path: kustomize{{.extension}}
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm64
+    - linux/ppc64le
+    - linux/s390x
+    - windows/amd64
+    - windows/arm64
   mockgen:
     url: https://github.com/golang/mock/releases/download/v{{.version}}/mock_{{.version}}_{{.os}}_{{.arch}}.tar.gz
     archive_path: mock_{{.version}}_{{.os}}_{{.arch}}/mockgen{{.archivepathsuffix}}
@@ -742,6 +795,22 @@ url_checksums:
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.darwin.x86_64.tar.xz: e065d4afb2620cc8c1d420a9b3e6243c84ff1a693c1ff0e38f279c8f31e86634
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz: ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.zip: 2a616cbb5b15aec8238f22c0d62dede1b6d155798adc45ff4d0206395a8a5833
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_darwin_amd64.tar.gz: 8dfd2648948eac4b1bd996e0c87f6fe3f451db54e265cf42cbadb94b0c56f553
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_darwin_arm64.tar.gz: 54cfbf2e18e1a344469f892715c037c58301852822afe16085435d57cc13abee
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_amd64.tar.gz: 1159c5c17c964257123b10e7d8864e9fe7f9a580d4124a388e746e4003added3
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_arm64.tar.gz: 094417546ab9b44ece44f3b31f3170080d0682519144301d5b6be080276a1f34
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_ppc64le.tar.gz: d9ed14a3c7a178bcd9a1a6d886abf58091bbe7ca4107799d37dcad1d8f18a0cf
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_s390x.tar.gz: 55b714121ae05f9e6c4f6045ddcaf3a895dca3056147121558f03a64e542a0a3
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_windows_amd64.tar.gz: 954dfa7e3fa0b3f86de5b62f0de7ac0e45cc1385eb8694afd2a5a1ac5dcb1e63
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_windows_arm64.tar.gz: 67e1c5b63770f18e46840b7e7c6c87af7825c7815af2d917ddb90ff88a5ebf4f
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_darwin_amd64.tar.gz: 76fbaad14142bd532d6a6a7912c6b1e48e427fb20659f172ffd4232d1d430b78
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_darwin_arm64.tar.gz: 30ddc0608db8152282a9e214b7c431d9d3932a02d97217ff55f5b5e3d6a6d5a9
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_amd64.tar.gz: 6802d54917eb5887f9c71031c59e6845c1a490c13881b050ea6959b714b4a432
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_arm64.tar.gz: 3b66709c7692c5ccfdcb2f4dd383e7aa622b451b046f2197b59033f16457b3b3
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_ppc64le.tar.gz: dc817311b206214709541ef94e019abff644af33029ccef25edf141f99a543cd
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_s390x.tar.gz: 82088fc1cfc052df2f86691a0de4a31a23df9df8542f224c17fd5602d2fa633c
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_windows_amd64.tar.gz: 4974359500e8315e5e00be6cc65383872723313f96e2cf9f30971d087a2877a5
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_windows_arm64.tar.gz: f8f3e54e6cf02cf17d7045892a7d8de917427dde5a0857472349f28438f26b58
   https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_darwin_amd64.tar.gz: f5d5a800bf29dd3175cbec47ad7f424bf5fb887fc9922bd141749982f78bd6ac
   https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_linux_amd64.tar.gz: e8d97abff71c7b964e582c16869953940f37506097ee2bc26835f7bf3a2cc9ac
   https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_windows_amd64.tar.gz: 1f18384b83887dae2cdff66dcc26e53d3992eb1d8240a57d87e65bb4723adf76
@@ -792,6 +861,13 @@ url_checksums:
   https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-osx-x86_64.zip: 9dbe9128eeba41a969d1e87207e97a3884f68718d84ec5debc92115d5a957286
   https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win32.zip: ce84bd3d3287555ec99da21a7e6e91c7385b64b018343f04b76337933209b69f
   https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip: 7e904214696702285aa5b503a86fa38a14c9eeb0f3fe10ff3115a74e3a90dae8
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_darwin_amd64: 02fdeba4bd9e49e49baf4792575c5529f880a658ab2f11aa6262e1ac8533a53d
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_darwin_arm64: b546ce3895182ddb560740f49909edfddff6c0c615704a258e8a3f1ee6917669
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_linux_386: e3850c626900b360711acff6629873289a522f7d4e037537d053df17ce56263d
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_linux_amd64: 599b21ea7286a26633488f637e423c8f779faf6d5d442f2406cfec6995842e8e
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_linux_arm64: c37c94f6141792b3abfe92dd16d9dedc5c985014077472ed05bfd87e7918b19e
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_windows_386.exe: 6ff7391a589f40460b2ed1eebd26de51784e5ee01b9b123b93903c50ad11c802
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_windows_amd64.exe: 14e62b50ad12d7b3a1189a68b15191abd3add84563732edd5e1fdcff82cc59e0
   https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_linux_amd64.tar.gz: 21fa960e4bdfbe34ddefa6b0d09eb5d21586a0afddfd1ee4a52277705e93e866
   https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_mac_amd64.tar.gz: f2b868ca238620a9a9da7f3d7b457c8778bdcf615399ba1e35b6e7a2cd62fbd5
   https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_mac_arm64.tar.gz: 4617b722cd8e38899a82d11d5ceb1536859e44bda718a6270d34fb1b8808eb25
