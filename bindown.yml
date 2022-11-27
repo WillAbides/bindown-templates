@@ -1,4 +1,8 @@
 dependencies:
+  aws-iam-authenticator:
+    template: k8s-aws-iam-authenticator
+    vars:
+      version: 0.5.7
   buf:
     template: buf
     vars:
@@ -83,6 +87,10 @@ dependencies:
     template: sqlc
     vars:
       version: 1.11.0
+  stern:
+    template: stern
+    vars:
+      version: 1.21.0
   yq:
     template: yq
     vars:
@@ -375,6 +383,27 @@ templates:
     - darwin/amd64
     - darwin/arm64
     - windows/386
+    - windows/amd64
+  k8s-aws-iam-authenticator:
+    url: https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v{{.version}}/aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
+    archive_path: aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
+    bin: aws-iam-authenticator
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm64
     - windows/amd64
   kustomize:
     url: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv{{.version}}/kustomize_v{{.version}}_{{.os}}_{{.arch}}.tar.gz
@@ -674,6 +703,29 @@ templates:
     - darwin/amd64
     - darwin/arm64
     - windows/amd64
+  stern:
+    url: https://github.com/stern/stern/releases/download/v{{.version}}/stern_{{.version}}_{{.os}}_{{.arch}}.tar.gz
+    archive_path: stern{{.archivepathsuffix}}
+    vars:
+      archivepathsuffix: ""
+    overrides:
+      - matcher:
+          os:
+            - windows
+        dependency:
+          vars:
+            archivepathsuffix: .exe
+    required_vars:
+    - version
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm
+    - linux/arm64
+    - windows/amd64
+    - windows/arm
+    - windows/arm64
   yq:
     url: https://github.com/mikefarah/yq/releases/download/v{{.version}}/yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
     archive_path: yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
@@ -795,6 +847,11 @@ url_checksums:
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.darwin.x86_64.tar.xz: e065d4afb2620cc8c1d420a9b3e6243c84ff1a693c1ff0e38f279c8f31e86634
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz: ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.zip: 2a616cbb5b15aec8238f22c0d62dede1b6d155798adc45ff4d0206395a8a5833
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_darwin_amd64: 6bd8b22d59ed433a4fd8fc3fef03d4ecbc6da5dd2f8a1f9236ac3c11835eac94
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_darwin_arm64: 4e621b90ed8923a1e08bbdeff86434a6c452f707968cabbdef6f7fb68aaf474f
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_linux_amd64: cfc17dbec11281477a82ccefce476909e56b3eb345518b1af53fe78a815451bb
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_linux_arm64: bbc9e31d715949f8d7f2d860c81a41765203b9cb1e973cefe15eb686752c6274
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_windows_amd64.exe: 7aa1111392e3e06e15ecffec815827f8c8f81340307cee054c826dc42c6c92bd
   https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_darwin_amd64.tar.gz: 8dfd2648948eac4b1bd996e0c87f6fe3f451db54e265cf42cbadb94b0c56f553
   https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_darwin_arm64.tar.gz: 54cfbf2e18e1a344469f892715c037c58301852822afe16085435d57cc13abee
   https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_amd64.tar.gz: 1159c5c17c964257123b10e7d8864e9fe7f9a580d4124a388e746e4003added3
@@ -876,5 +933,13 @@ url_checksums:
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64: 5c0a0a3ea600f302ee458b30317425dd9632d1ad8882259fcaf4e9b868b2b1ef
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win32.exe: 0012cb4c0eb6eaf97b842e676e423a69a8fea95055d93830551b4a5a54494bd8
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe: a51d36968dcbdeabb3142c6f5cf9b401a65dc3a095f3144bd0c118d5bb192753
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_darwin_amd64.tar.gz: 41c1e1083d00cebbfe0d267cac0edf89bf1326319939b6b33c683d03611bc9f0
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_darwin_arm64.tar.gz: 6fecf90318039282bc5432726b49b4eb88653fb7dc33c94f00b3f04e4f3cf82a
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_linux_amd64.tar.gz: 18bb5afa0426d1ca2e975bee2a04037378d99ffdda6e3383a575ad28d5c2d04d
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_linux_arm.tar.gz: bab20d23d99cf5d28e7838f95cf69f1a4ad05a050052a077d070c435aceca8f3
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_linux_arm64.tar.gz: f76cc25846b01354cf2e8cde211914ca910b77c919df1bf287c2448c65e74c1b
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_windows_amd64.tar.gz: c3f148576e604b250f4df4769079f7b69f62b2dfcdff10dc5fbd51815c297331
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_windows_arm.tar.gz: 16916ddcf909ee3d6448b7646c806d2d540dd21ffd336139521a21dd0706b963
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_windows_arm64.tar.gz: 83ea1d297f4f470f2e947c187d97a005349e03b3a6eb703a4fc237a1f6315fb8
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Darwin-x86_64.tar.gz: 98ff342d0cd307ab136652bd61cd174f4b7a1fe0eb0cb23ea35885ef84f14857
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Linux-x86_64.tar.gz: 50e53589b95e2435e26de01de8eac6af6ae6980b1cacf1e0ad319b7644f16b3b
