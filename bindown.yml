@@ -1,4 +1,8 @@
 dependencies:
+  aws-iam-authenticator:
+    template: aws-iam-authenticator
+    vars:
+      version: 0.5.7
   buf:
     template: buf
     vars:
@@ -23,10 +27,30 @@ dependencies:
     template: goreleaser
     vars:
       version: 1.2.2
+  helm:
+    template: helm
+    vars:
+      version: 3.10.2
+  helmfile:
+    template: helmfile
+    vars:
+      version: 0.143.5
   jq:
     template: jq
     vars:
       version: "1.6"
+  kubectx:
+    template: kubectx
+    vars:
+      version: 0.9.4
+  kubens:
+    template: kubens
+    vars:
+      version: 0.9.4
+  kustomize:
+    template: kustomize
+    vars:
+      version: 4.5.6
   mockgen:
     template: mockgen
     vars:
@@ -71,11 +95,36 @@ dependencies:
     template: sqlc
     vars:
       version: 1.11.0
+  stern:
+    template: stern
+    vars:
+      version: 1.21.0
   yq:
     template: yq
     vars:
       version: 4.14.2
 templates:
+  aws-iam-authenticator:
+    url: https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v{{.version}}/aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
+    archive_path: aws-iam-authenticator_{{.version}}_{{.os}}_{{.arch}}{{.extension}}
+    bin: aws-iam-authenticator
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm64
+    - windows/amd64
   buf:
     url: https://github.com/bufbuild/buf/releases/download/v{{.version}}/{{.binname}}-{{.os}}-{{.arch}}{{.extension}}
     archive_path: '{{.binname}}-{{.os}}-{{.arch}}{{.extension}}'
@@ -279,6 +328,54 @@ templates:
     - linux/amd64
     - windows/386
     - windows/amd64
+  helm:
+    url: https://get.helm.sh/helm-v{{.version}}-{{.os}}-{{.arch}}{{.urlsuffix}}
+    archive_path: '{{.os}}-{{.arch}}/helm{{.archivepathsuffix}}'
+    vars:
+      archivepathsuffix: ""
+      urlsuffix: .tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivepathsuffix: .exe
+          urlsuffix: .zip
+    systems:
+    - darwin/arm64
+    - darwin/amd64
+    - linux/amd64
+    - linux/arm64
+    - linux/arm
+    - linux/386
+    - linux/ppc64le
+    - linux/s390x
+    - windows/amd64
+  helmfile:
+    url: https://github.com/roboll/helmfile/releases/download/v{{.version}}/helmfile_{{.os}}_{{.arch}}{{.extension}}
+    archive_path: helmfile_{{.os}}_{{.arch}}{{.extension}}
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/386
+    - linux/amd64
+    - linux/arm64
+    - windows/386
+    - windows/amd64
   jq:
     url: https://github.com/stedolan/jq/releases/download/jq-{{.version}}/jq-{{.os}}{{.arch}}{{.extension}}
     archive_path: jq-{{.os}}{{.arch}}{{.extension}}
@@ -316,6 +413,81 @@ templates:
     - darwin/arm64
     - windows/386
     - windows/amd64
+  kubectx:
+    url: https://github.com/ahmetb/kubectx/releases/download/v{{.version}}/kubectx_v{{.version}}_{{.os}}_{{.arch}}{{.urlsuffix}}
+    archive_path: kubectx{{.archivesuffix}}
+    vars:
+      archivesuffix: ""
+      urlsuffix: .tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivesuffix: .exe
+          urlsuffix: .zip
+    substitutions:
+      arch:
+        "386": i386
+        amd64: x86_64
+    systems:
+    - darwin/arm64
+    - darwin/amd64
+    - linux/amd64
+    - linux/arm64
+    - windows/amd64
+  kubens:
+    url: https://github.com/ahmetb/kubectx/releases/download/v{{.version}}/kubens_v{{.version}}_{{.os}}_{{.arch}}{{.urlsuffix}}
+    archive_path: kubens{{.archivesuffix}}
+    vars:
+      archivesuffix: ""
+      urlsuffix: .tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivesuffix: .exe
+          urlsuffix: .zip
+    substitutions:
+      arch:
+        "386": i386
+        amd64: x86_64
+    systems:
+    - darwin/arm64
+    - darwin/amd64
+    - linux/amd64
+    - linux/arm64
+    - windows/amd64
+  kustomize:
+    url: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv{{.version}}/kustomize_v{{.version}}_{{.os}}_{{.arch}}.tar.gz
+    archive_path: kustomize{{.extension}}
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm64
+    - linux/ppc64le
+    - linux/s390x
+    - windows/amd64
+    - windows/arm64
   mockgen:
     url: https://github.com/golang/mock/releases/download/v{{.version}}/mock_{{.version}}_{{.os}}_{{.arch}}.tar.gz
     archive_path: mock_{{.version}}_{{.os}}_{{.arch}}/mockgen{{.archivepathsuffix}}
@@ -591,6 +763,29 @@ templates:
     - darwin/amd64
     - darwin/arm64
     - windows/amd64
+  stern:
+    url: https://github.com/stern/stern/releases/download/v{{.version}}/stern_{{.version}}_{{.os}}_{{.arch}}.tar.gz
+    archive_path: stern{{.archivepathsuffix}}
+    vars:
+      archivepathsuffix: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivepathsuffix: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm
+    - linux/arm64
+    - windows/amd64
+    - windows/arm
+    - windows/arm64
   yq:
     url: https://github.com/mikefarah/yq/releases/download/v{{.version}}/yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
     archive_path: yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
@@ -641,6 +836,15 @@ url_checksums:
   https://dl.google.com/go/go1.17.2.linux-s390x.tar.gz: c4b2349a8d11350ca038b8c57f3cc58dc0b31284bcbed4f7fca39aeed28b4a51
   https://dl.google.com/go/go1.17.2.windows-386.zip: 8a85257a351996fdf045fe95ed5fdd6917dd48636d562dd11dedf193005a53e0
   https://dl.google.com/go/go1.17.2.windows-amd64.zip: fa6da0b829a66f5fab7e4e312fd6aa1b2d8f045c7ecee83b3d00f6fe5306759a
+  https://get.helm.sh/helm-v3.10.2-darwin-amd64.tar.gz: e889960e4c1d7e2dfdb91b102becfaf22700cb86dc3e3553d9bebd7bab5a3803
+  https://get.helm.sh/helm-v3.10.2-darwin-arm64.tar.gz: 460441eea1764ca438e29fa0e38aa0d2607402f753cb656a4ab0da9223eda494
+  https://get.helm.sh/helm-v3.10.2-linux-386.tar.gz: ac9cbef2ec1237e2723ee8d3a92d1c4525a2da7cecc11336ba67de9bb6b473f0
+  https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz: 2315941a13291c277dac9f65e75ead56386440d3907e0540bf157ae70f188347
+  https://get.helm.sh/helm-v3.10.2-linux-arm.tar.gz: 25af344f46348958baa1c758cdf3b204ede3ddc483be1171ed3738d47efd0aae
+  https://get.helm.sh/helm-v3.10.2-linux-arm64.tar.gz: 57fa17b6bb040a3788116557a72579f2180ea9620b4ee8a9b7244e5901df02e4
+  https://get.helm.sh/helm-v3.10.2-linux-ppc64le.tar.gz: 53a578b84155d31c3e62dd93a88586b75e876dae82c7912c895ee5a574fa6209
+  https://get.helm.sh/helm-v3.10.2-linux-s390x.tar.gz: 33cb4a3382bea6bcd7eb7f385dd08941bdc84d0020345951eb467fbc8f5ccb60
+  https://get.helm.sh/helm-v3.10.2-windows-amd64.zip: f1a3190adecc26270bbef4f3ab2d1a56509f9d8df95413cdd6e3151f6f367862
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_darwin_amd64.tar.gz: 8cbb8eecdc257c0c92bc784fdad349e4d4bcd9c541485f6ea5f495c9ebe66718
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_linux_386.tar.gz: 35c2ffe073a7d9c9bdd4d14186fcb5d6f594794b7133f5157db388c208d37c65
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_linux_amd64.tar.gz: 4b45f44f339f5a0139b7a82267fabb47a4685ac183f5f41b5121c080ca94ca1e
@@ -652,6 +856,16 @@ url_checksums:
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_linux_amd64.tar.gz: 6317c36bec63158038381e8878601151ae996310fef58306f70cb03f1b46ef7f
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_windows_386.tar.gz: b8341ed458930d4ee6302033c7aba6245f31d655da9970c60e1b91ab7419f710
   https://github.com/WillAbides/semver-next/releases/download/v0.4.0/semver-next_0.4.0_windows_amd64.tar.gz: 573ea65ef3b40442626fbb19d07880bb4929e7b12fd7161e41732a03f23b2c95
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_darwin_arm64.tar.gz: 7adeaf057809ef756b6f290c2e0557e86c1d04718239166a9ef0298db6fe5b27
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_darwin_x86_64.tar.gz: 99392d5cc3d174a18b68d9cce6872dc6c7216d58b6913e4f6a51274cffa95583
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_linux_arm64.tar.gz: 5fab3c0624a83cf8fff5c34d90f854af6fa8b501ed63306aaf5355303ae884ed
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_linux_x86_64.tar.gz: db5a48e85ff4d8c6fa947e3021e11ba4376f9588dd5fa779a80ed5c18287db22
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_windows_x86_64.zip: 31a30912ace13fe0a458a253bc76bd106c48f3b0967ac2676cfd8b7fae71e314
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubens_v0.9.4_darwin_arm64.tar.gz: dbae919016d4ebfa09780135cacd9d787b2d3882f13c3d5b3c3c883180496209
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubens_v0.9.4_darwin_x86_64.tar.gz: ef43ab1217e09ac1b929d4b9dd2c22cbb10540ef277a3a9b484c020820c988b1
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubens_v0.9.4_linux_arm64.tar.gz: 7c2d0d4d46338bf400ebba1b23947d35b25725b9b4e3e1932bb88b3ec3f96a5a
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubens_v0.9.4_linux_x86_64.tar.gz: 8b3672961fb15f8b87d5793af8bd3c1cca52c016596fbf57c46ab4ef39265fcd
+  https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubens_v0.9.4_windows_x86_64.zip: eab9ace6e25303b522e7006a1c9e44747b9e9c005e15b1fcf8a9678569ca1c95
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/buf-Darwin-arm64: 9ea62047c4b27f8ba076726de4f36f94985c9914bdd7d79f3273aa17dfe70d11
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/buf-Darwin-x86_64: 426554e6c79be0cd2680cb22bfe157b7398d714f3dc7ddd799fa06f1d07681cf
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/buf-Linux-aarch64: fce46750e93e84fbd1c0e9bf5f72331dbcb07f23ec61c1f39f0007ab3387d1ab
@@ -703,6 +917,27 @@ url_checksums:
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.darwin.x86_64.tar.xz: e065d4afb2620cc8c1d420a9b3e6243c84ff1a693c1ff0e38f279c8f31e86634
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz: ab6ee1b178f014d1b86d1e24da20d1139656c8b0ed34d2867fbb834dad02bf0a
   https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.zip: 2a616cbb5b15aec8238f22c0d62dede1b6d155798adc45ff4d0206395a8a5833
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_darwin_amd64: 6bd8b22d59ed433a4fd8fc3fef03d4ecbc6da5dd2f8a1f9236ac3c11835eac94
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_darwin_arm64: 4e621b90ed8923a1e08bbdeff86434a6c452f707968cabbdef6f7fb68aaf474f
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_linux_amd64: cfc17dbec11281477a82ccefce476909e56b3eb345518b1af53fe78a815451bb
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_linux_arm64: bbc9e31d715949f8d7f2d860c81a41765203b9cb1e973cefe15eb686752c6274
+  https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.5.7/aws-iam-authenticator_0.5.7_windows_amd64.exe: 7aa1111392e3e06e15ecffec815827f8c8f81340307cee054c826dc42c6c92bd
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_darwin_amd64.tar.gz: 8dfd2648948eac4b1bd996e0c87f6fe3f451db54e265cf42cbadb94b0c56f553
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_darwin_arm64.tar.gz: 54cfbf2e18e1a344469f892715c037c58301852822afe16085435d57cc13abee
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_amd64.tar.gz: 1159c5c17c964257123b10e7d8864e9fe7f9a580d4124a388e746e4003added3
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_arm64.tar.gz: 094417546ab9b44ece44f3b31f3170080d0682519144301d5b6be080276a1f34
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_ppc64le.tar.gz: d9ed14a3c7a178bcd9a1a6d886abf58091bbe7ca4107799d37dcad1d8f18a0cf
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_linux_s390x.tar.gz: 55b714121ae05f9e6c4f6045ddcaf3a895dca3056147121558f03a64e542a0a3
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_windows_amd64.tar.gz: 954dfa7e3fa0b3f86de5b62f0de7ac0e45cc1385eb8694afd2a5a1ac5dcb1e63
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.4/kustomize_v4.5.4_windows_arm64.tar.gz: 67e1c5b63770f18e46840b7e7c6c87af7825c7815af2d917ddb90ff88a5ebf4f
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_darwin_amd64.tar.gz: 76fbaad14142bd532d6a6a7912c6b1e48e427fb20659f172ffd4232d1d430b78
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_darwin_arm64.tar.gz: 30ddc0608db8152282a9e214b7c431d9d3932a02d97217ff55f5b5e3d6a6d5a9
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_amd64.tar.gz: 6802d54917eb5887f9c71031c59e6845c1a490c13881b050ea6959b714b4a432
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_arm64.tar.gz: 3b66709c7692c5ccfdcb2f4dd383e7aa622b451b046f2197b59033f16457b3b3
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_ppc64le.tar.gz: dc817311b206214709541ef94e019abff644af33029ccef25edf141f99a543cd
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_linux_s390x.tar.gz: 82088fc1cfc052df2f86691a0de4a31a23df9df8542f224c17fd5602d2fa633c
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_windows_amd64.tar.gz: 4974359500e8315e5e00be6cc65383872723313f96e2cf9f30971d087a2877a5
+  https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv4.5.6/kustomize_v4.5.6_windows_arm64.tar.gz: f8f3e54e6cf02cf17d7045892a7d8de917427dde5a0857472349f28438f26b58
   https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_darwin_amd64.tar.gz: f5d5a800bf29dd3175cbec47ad7f424bf5fb887fc9922bd141749982f78bd6ac
   https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_linux_amd64.tar.gz: e8d97abff71c7b964e582c16869953940f37506097ee2bc26835f7bf3a2cc9ac
   https://github.com/kyleconroy/sqlc/releases/download/v1.11.0/sqlc_1.11.0_windows_amd64.tar.gz: 1f18384b83887dae2cdff66dcc26e53d3992eb1d8240a57d87e65bb4723adf76
@@ -753,6 +988,13 @@ url_checksums:
   https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-osx-x86_64.zip: 9dbe9128eeba41a969d1e87207e97a3884f68718d84ec5debc92115d5a957286
   https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win32.zip: ce84bd3d3287555ec99da21a7e6e91c7385b64b018343f04b76337933209b69f
   https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip: 7e904214696702285aa5b503a86fa38a14c9eeb0f3fe10ff3115a74e3a90dae8
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_darwin_amd64: 02fdeba4bd9e49e49baf4792575c5529f880a658ab2f11aa6262e1ac8533a53d
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_darwin_arm64: b546ce3895182ddb560740f49909edfddff6c0c615704a258e8a3f1ee6917669
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_linux_386: e3850c626900b360711acff6629873289a522f7d4e037537d053df17ce56263d
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_linux_amd64: 599b21ea7286a26633488f637e423c8f779faf6d5d442f2406cfec6995842e8e
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_linux_arm64: c37c94f6141792b3abfe92dd16d9dedc5c985014077472ed05bfd87e7918b19e
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_windows_386.exe: 6ff7391a589f40460b2ed1eebd26de51784e5ee01b9b123b93903c50ad11c802
+  https://github.com/roboll/helmfile/releases/download/v0.143.5/helmfile_windows_amd64.exe: 14e62b50ad12d7b3a1189a68b15191abd3add84563732edd5e1fdcff82cc59e0
   https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_linux_amd64.tar.gz: 21fa960e4bdfbe34ddefa6b0d09eb5d21586a0afddfd1ee4a52277705e93e866
   https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_mac_amd64.tar.gz: f2b868ca238620a9a9da7f3d7b457c8778bdcf615399ba1e35b6e7a2cd62fbd5
   https://github.com/skeema/skeema/releases/download/v1.6.0/skeema_1.6.0_mac_arm64.tar.gz: 4617b722cd8e38899a82d11d5ceb1536859e44bda718a6270d34fb1b8808eb25
@@ -761,5 +1003,13 @@ url_checksums:
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64: 5c0a0a3ea600f302ee458b30317425dd9632d1ad8882259fcaf4e9b868b2b1ef
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win32.exe: 0012cb4c0eb6eaf97b842e676e423a69a8fea95055d93830551b4a5a54494bd8
   https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe: a51d36968dcbdeabb3142c6f5cf9b401a65dc3a095f3144bd0c118d5bb192753
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_darwin_amd64.tar.gz: 41c1e1083d00cebbfe0d267cac0edf89bf1326319939b6b33c683d03611bc9f0
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_darwin_arm64.tar.gz: 6fecf90318039282bc5432726b49b4eb88653fb7dc33c94f00b3f04e4f3cf82a
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_linux_amd64.tar.gz: 18bb5afa0426d1ca2e975bee2a04037378d99ffdda6e3383a575ad28d5c2d04d
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_linux_arm.tar.gz: bab20d23d99cf5d28e7838f95cf69f1a4ad05a050052a077d070c435aceca8f3
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_linux_arm64.tar.gz: f76cc25846b01354cf2e8cde211914ca910b77c919df1bf287c2448c65e74c1b
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_windows_amd64.tar.gz: c3f148576e604b250f4df4769079f7b69f62b2dfcdff10dc5fbd51815c297331
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_windows_arm.tar.gz: 16916ddcf909ee3d6448b7646c806d2d540dd21ffd336139521a21dd0706b963
+  https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_windows_arm64.tar.gz: 83ea1d297f4f470f2e947c187d97a005349e03b3a6eb703a4fc237a1f6315fb8
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Darwin-x86_64.tar.gz: 98ff342d0cd307ab136652bd61cd174f4b7a1fe0eb0cb23ea35885ef84f14857
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Linux-x86_64.tar.gz: 50e53589b95e2435e26de01de8eac6af6ae6980b1cacf1e0ad319b7644f16b3b
