@@ -22,6 +22,8 @@ goreleaser
 helm
 helmfile
 jq
+kubectx
+kubens
 kustomize
 mockgen
 octo
