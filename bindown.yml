@@ -39,6 +39,10 @@ dependencies:
     template: jq
     vars:
       version: "1.6"
+  kubectl:
+    template: kubectl
+    vars:
+      version: 1.23.12
   kubectx:
     template: kubectx
     vars:
@@ -413,6 +417,33 @@ templates:
     - darwin/arm64
     - windows/386
     - windows/amd64
+  kubectl:
+    url: https://dl.k8s.io/release/v{{.version}}/bin/{{.os}}/{{.arch}}/kubectl{{.extension}}
+    archive_path: kubectl{{.extension}}
+    bin: kubectl
+    vars:
+      extension: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          extension: .exe
+    systems:
+    - darwin/arm64
+    - darwin/amd64
+    - linux/amd64
+    - linux/arm64
+    - linux/386
+    - linux/ppc64le
+    - linux/s390x
+    - linux/arm
+    - windows/amd64
+    - windows/386
+    - windows/arm64
   kubectx:
     url: https://github.com/ahmetb/kubectx/releases/download/v{{.version}}/kubectx_v{{.version}}_{{.os}}_{{.arch}}{{.urlsuffix}}
     archive_path: kubectx{{.archivesuffix}}
@@ -836,6 +867,17 @@ url_checksums:
   https://dl.google.com/go/go1.17.2.linux-s390x.tar.gz: c4b2349a8d11350ca038b8c57f3cc58dc0b31284bcbed4f7fca39aeed28b4a51
   https://dl.google.com/go/go1.17.2.windows-386.zip: 8a85257a351996fdf045fe95ed5fdd6917dd48636d562dd11dedf193005a53e0
   https://dl.google.com/go/go1.17.2.windows-amd64.zip: fa6da0b829a66f5fab7e4e312fd6aa1b2d8f045c7ecee83b3d00f6fe5306759a
+  https://dl.k8s.io/release/v1.23.12/bin/darwin/amd64/kubectl: c73e6b2013c32082a000e452274974c194eac2b9bc9c118086011c75b63f6303
+  https://dl.k8s.io/release/v1.23.12/bin/darwin/arm64/kubectl: fa6260f06f6b2b79b0ebef99a36d78f29cfedbf6256f0c5f1007902954dac295
+  https://dl.k8s.io/release/v1.23.12/bin/linux/386/kubectl: 7c5a17f2d137104f0a4a02c95bffcd3b2898b897e44f684d207e28a21eb5046f
+  https://dl.k8s.io/release/v1.23.12/bin/linux/amd64/kubectl: b150c7c4830cc3be4bedd8998bf36a92975c95cd1967b4ef2d1edda080ffe5d9
+  https://dl.k8s.io/release/v1.23.12/bin/linux/arm/kubectl: 94e946dcd1c2f7c8c9e3e022202762a36dab604b861b50bdcbdfb2c719731bd9
+  https://dl.k8s.io/release/v1.23.12/bin/linux/arm64/kubectl: 88ebbc41252b39d49ce574a5a2bb25943bb82e55a252c27fe4fc096ce2dbb437
+  https://dl.k8s.io/release/v1.23.12/bin/linux/ppc64le/kubectl: f9a8efede8872c23c54c44f09657fa522e99786f3dc73ba7d6d928e9b3c7dc1a
+  https://dl.k8s.io/release/v1.23.12/bin/linux/s390x/kubectl: 3f40cdfa46c6069d354c03d93f699b8be0cd87a8f48a0bc0e3517e8893377a00
+  https://dl.k8s.io/release/v1.23.12/bin/windows/386/kubectl.exe: 2ab53012617945ae23fd4cd8d2b4ba60150e6d7493967bac1e665d802e47cf71
+  https://dl.k8s.io/release/v1.23.12/bin/windows/amd64/kubectl.exe: e48f701a29734fb97ba748f84e5624feb3e97fb7addac15685e43712d2b2a215
+  https://dl.k8s.io/release/v1.23.12/bin/windows/arm64/kubectl.exe: 934d70aa8750f823ac9578e6c8b97772409abe2ba2df109d92c7a2798977e94b
   https://get.helm.sh/helm-v3.10.2-darwin-amd64.tar.gz: e889960e4c1d7e2dfdb91b102becfaf22700cb86dc3e3553d9bebd7bab5a3803
   https://get.helm.sh/helm-v3.10.2-darwin-arm64.tar.gz: 460441eea1764ca438e29fa0e38aa0d2607402f753cb656a4ab0da9223eda494
   https://get.helm.sh/helm-v3.10.2-linux-386.tar.gz: ac9cbef2ec1237e2723ee8d3a92d1c4525a2da7cecc11336ba67de9bb6b473f0
