@@ -22,6 +22,7 @@ goreleaser
 helm
 helmfile
 jq
+kubectl
 kubectx
 kubens
 kustomize
@@ -37,6 +38,7 @@ shellcheck
 skeema
 sqlc
 stern
+terraform
 yq
 ```
 <!--- end usage output --->
