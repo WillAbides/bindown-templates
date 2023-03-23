@@ -103,6 +103,10 @@ dependencies:
     template: stern
     vars:
       version: 1.21.0
+  terraform:
+    template: terraform
+    vars:
+      version: 1.4.2
   yq:
     template: yq
     vars:
@@ -817,6 +821,41 @@ templates:
     - windows/amd64
     - windows/arm
     - windows/arm64
+  terraform:
+    url: https://releases.hashicorp.com/terraform/{{.version}}/terraform_{{.version}}_{{.os}}_{{.arch}}.zip
+    archive_path: terraform
+    bin: terraform
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        url: https://releases.hashicorp.com/terraform/{{.version}}/terraform_{{.version}}_{{.os}}_{{.arch}}.zip
+        archive_path: terraform.exe
+    - matcher:
+        arch:
+        - arm64
+        os:
+        - darwin
+      dependency:
+        vars:
+          arch: amd64
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - windows/amd64
+    - windows/386
+    - linux/amd64
+    - linux/386
+    - linux/arm
+    - linux/arm64
+    - freebsd/amd64
+    - freebsd/386
+    - freebsd/arm
+    - openbsd/amd64
+    - openbsd/386
   yq:
     url: https://github.com/mikefarah/yq/releases/download/v{{.version}}/yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
     archive_path: yq_{{.os}}_{{.arch}}{{.archivepathsuffix}}
@@ -1055,3 +1094,15 @@ url_checksums:
   https://github.com/stern/stern/releases/download/v1.21.0/stern_1.21.0_windows_arm64.tar.gz: 83ea1d297f4f470f2e947c187d97a005349e03b3a6eb703a4fc237a1f6315fb8
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Darwin-x86_64.tar.gz: 98ff342d0cd307ab136652bd61cd174f4b7a1fe0eb0cb23ea35885ef84f14857
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Linux-x86_64.tar.gz: 50e53589b95e2435e26de01de8eac6af6ae6980b1cacf1e0ad319b7644f16b3b
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_darwin_amd64.zip: c218a6c0ef6692b25af16995c8c7bdf6739e9638fef9235c6aced3cd84afaf66
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_freebsd_386.zip: e64d6065e603917d1774532e5650069415acc3926d5342c9f0c00673f7fb46d2
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_freebsd_amd64.zip: a4e6fb45bb02385aa48e133a10f8b6aefbf4be8755eda7e74c126d239802524f
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_freebsd_arm.zip: acadf69998e876dda4ab88abaac1edd12f196864d2679f78c469700894c38937
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_linux_386.zip: 1e52088f0908c6ddbc80df1a3af15d44d2b7414e72153383fd89f667bbaa7f48
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_linux_amd64.zip: 9f3ca33d04f5335472829d1df7785115b60176d610ae6f1583343b0a2221a931
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_linux_arm.zip: dbb1e7179279bd739ff889b994738f25a80a8eac5ae255b50bdf5f86b9eda28b
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_linux_arm64.zip: 39c182670c4e63e918e0a16080b1cc47bb16e158d7da96333d682d6a9cb8eb91
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_openbsd_386.zip: 05497daa9e4231b3eb1f9d9d6b21bfd3407f7d87609751a64c3cd4aa134be734
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_openbsd_amd64.zip: 7477fa26f7e6175be19f6411c2ec5b7a63797d4421b2d5d5696dd94aa3fd6bbf
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_windows_386.zip: d2e59f8dc9640adf26bcdf038a6109d6da569a445080e1ee7183b325caf49f85
+  https://releases.hashicorp.com/terraform/1.4.2/terraform_1.4.2_windows_amd64.zip: 7edfbad5c22e8c62e403c26ee1d10f71cebcc87def267b17fd5c9e9ed90312aa
