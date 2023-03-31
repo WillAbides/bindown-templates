@@ -91,6 +91,10 @@ dependencies:
     template: shellcheck
     vars:
       version: 0.8.0
+  shfmt:
+    template: shfmt
+    vars:
+      version: 3.6.0
   skeema:
     template: skeema
     vars:
@@ -757,6 +761,30 @@ templates:
     - darwin/arm64
     - linux/amd64
     - windows/amd64
+  shfmt:
+    url: https://github.com/mvdan/sh/releases/download/v{{.version}}/shfmt_v{{.version}}_{{.os}}_{{.arch}}{{.suffix}}
+    archive_path: shfmt_v{{.version}}_{{.os}}_{{.arch}}{{.suffix}}
+    bin: shfmt
+    vars:
+      suffix: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          suffix: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/386
+    - linux/amd64
+    - linux/arm
+    - linux/arm64
+    - windows/386
+    - windows/amd64
   skeema:
     url: https://github.com/skeema/skeema/releases/download/v{{.version}}/skeema_{{.version}}_{{.os}}_{{.arch}}.tar.gz
     archive_path: skeema
@@ -1052,6 +1080,14 @@ url_checksums:
   https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_linux_arm64: 887c98ec5f71f9c7126a994286dad361b1a76a1196ebee9bd9820e84ba234fe2
   https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_windows_386.exe: 4b22f9665717ba044f5bd5e95db9372e300fd6ec1bb5427ab9b71bff3a2812e8
   https://github.com/mvdan/gofumpt/releases/download/v0.2.0/gofumpt_v0.2.0_windows_amd64.exe: e1cc29d1fd0d780dab8eb9d71010b11a0fd86fb44d6c29dd4fb1d5b4c6092dfb
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_darwin_amd64: b8c9c025b498e2816b62f0b717f6032e9ab49e725a45b8205f52f66318f17185
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_darwin_arm64: 633f242246ee0a866c5f5df25cbf61b6af0d5e143555aca32950059cf13d91e0
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_386: 9d771620e94f7834ebff12859dbeea0a160fcfab0ba3a2301cab258b6af3fd7d
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_amd64: 5741a02a641de7e56b8da170e71a97e58050d66a3cf485fb268d6a5a8bb74afb
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_arm: 4bff0195b081ab09e14f8a118e1e2183c4aaca8566db2d1c287c9c990bf43919
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_arm64: fb1cf0af3dbe9aac7d98e38e3c7426765208ecfe23cb2da51037bb234776fd70
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_windows_386.exe: 3753abfaca1beaf80a81e084c7947e60e2a08076270950d76197f4997fc122d0
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_windows_amd64.exe: 18122d910ba434be366588f37c302c309cde4ca5403f93285254a3cf96839d01
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Darwin_i386.tar.gz: 95969b3a171e57d06a1d4aa0544b58c21ac10288e01761191173d4411766c31f
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Darwin_x86_64.tar.gz: b3df6b15265aa68788a5028089b53049e708ed3e9b258364dbf730726143d351
   https://github.com/octo-cli/octo-cli/releases/download/v0.17.0/octo-cli_0.17.0_Linux_i386.tar.gz: 59eb0abbe75901e039f5ffc6d38599e548a0dfa4a1b04be0375f146ffe58e1d9
