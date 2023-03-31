@@ -14,6 +14,7 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 ```
 aws-iam-authenticator
 buf
+gh
 go
 go-test2action
 gofumpt
@@ -35,6 +36,7 @@ protoc-gen-go
 prototool
 semver-next
 shellcheck
+shfmt
 skeema
 sqlc
 stern
