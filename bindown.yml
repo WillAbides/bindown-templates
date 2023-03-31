@@ -7,6 +7,10 @@ dependencies:
     template: buf
     vars:
       version: 1.0.0-rc8
+  gh:
+    template: gh
+    vars:
+      version: 2.25.1
   go:
     template: go
     vars:
@@ -166,6 +170,32 @@ templates:
     - linux/amd64
     - windows/amd64
     - windows/arm64
+  gh:
+    url: https://github.com/cli/cli/releases/download/v{{.version}}/gh_{{.version}}_{{.os}}_{{.arch}}.{{.archiveext}}
+    archive_path: gh_{{.version}}_{{.os}}_{{.arch}}/bin/gh
+    bin: gh
+    vars:
+      archiveext: tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        archive_path: bin/gh.exe
+        vars:
+          archiveext: zip
+    substitutions:
+      os:
+        darwin: macOS
+    systems:
+    - linux/386
+    - linux/amd64
+    - linux/arm64
+    - darwin/amd64
+    - darwin/arm64
+    - windows/amd64
   go:
     url: https://dl.google.com/go/go{{.version}}.{{.os}}-{{.arch}}{{.urlsuffix}}
     archive_path: go/bin/go{{.archivepathsuffix}}
@@ -993,6 +1023,12 @@ url_checksums:
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/protoc-gen-buf-lint-Linux-x86_64: 21f6ad41cfc677c53bd576690718cacfcefd06dca306c72c3e6beeee8ca0adad
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/protoc-gen-buf-lint-Windows-arm64.exe: 4e51ed0def521d37bfbddb1daf5f3686999e0b4e760ef7a0024340c293b0414b
   https://github.com/bufbuild/buf/releases/download/v1.0.0-rc8/protoc-gen-buf-lint-Windows-x86_64.exe: ac2dc463193c3031d4d62caf42ecf10a1d869d8ac16ecd9c48a964162fa1db19
+  https://github.com/cli/cli/releases/download/v2.25.1/gh_2.25.1_linux_386.tar.gz: 6302a378473c6cfde14fb0431aa925beb1c890f166cfb95febc8c344e915475c
+  https://github.com/cli/cli/releases/download/v2.25.1/gh_2.25.1_linux_amd64.tar.gz: 869e780f9391804c1f9d355f6f7777931ef61447ca50c75433a5942f484e61d1
+  https://github.com/cli/cli/releases/download/v2.25.1/gh_2.25.1_linux_arm64.tar.gz: d4417c96f67314a963c40a312b68da7a616b4a5d5450b22b5aae99b24ea5dc70
+  https://github.com/cli/cli/releases/download/v2.25.1/gh_2.25.1_macOS_amd64.tar.gz: 414f5766a50b95ec73fcff17af6dc5c354b44d7f041370fea9de8f91990cc419
+  https://github.com/cli/cli/releases/download/v2.25.1/gh_2.25.1_macOS_arm64.tar.gz: e18f423f9983f84f011bebf9dea3b3bcd67cc79ef419040316cba35595bdb4b4
+  https://github.com/cli/cli/releases/download/v2.25.1/gh_2.25.1_windows_amd64.zip: 33be468155dabc1990e984eb9cb9e134c50cfe1c0bbeab92643355a8ea04e162
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_darwin_amd64.tar.gz: 938649db27055ec85bede32ccb95ff82f82af3c90a084ee52687a92066bcca92
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_darwin_arm64.tar.gz: 67a4a597dd759e186e17400cbc273be99c8cffc590335381134b3e933b409c83
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_linux_386.tar.gz: 5c956c808a1c1dc2161bdcf91818e658291b6629449592148851cf6db283c5e8
