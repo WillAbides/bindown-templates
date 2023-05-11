@@ -244,6 +244,7 @@ templates:
     url: https://dl.google.com/go/go{{.version}}.{{.os}}-{{.arch}}{{.urlSuffix}}
     archive_path: go/bin/go{{.archivePathSuffix}}
     bin: go
+    link: true
     vars:
       archivePathSuffix: ""
       urlSuffix: .tar.gz
