@@ -19,6 +19,7 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 - [gofumpt](https://github.com/mvdan/gofumpt) - A stricter gofmt
 - [golangci-lint](https://github.com/golangci/golangci-lint) - Fast linters Runner for Go
 - [goreleaser](https://github.com/goreleaser/goreleaser) - Deliver Go binaries as fast and easily as possible
+- [handcrafted](https://github.com/willabides/handcrafted) - lists non-generated go files in a package
 - [helm](https://helm.sh/) - The Kubernetes Package Manager
 - [helmfile](https://github.com/roboll/helmfile) - Deploy Kubernetes Helm Charts
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor
