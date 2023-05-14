@@ -31,6 +31,10 @@ dependencies:
     template: goreleaser
     vars:
       version: 1.18.2
+  handcrafted:
+    template: handcrafted
+    vars:
+      version: 0.0.0
   helm:
     template: helm
     vars:
@@ -408,6 +412,33 @@ templates:
     - linux/amd64
     - linux/arm64
     - linux/ppc64
+    - windows/386
+    - windows/amd64
+    - windows/arm64
+  handcrafted:
+    homepage: https://github.com/willabides/handcrafted
+    description: lists non-generated go files in a package
+    url: https://github.com/WillAbides/handcrafted/releases/download/v{{.version}}/handcrafted_{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
+    archive_path: handcrafted{{.archivePathSuffix}}
+    bin: handcrafted
+    vars:
+      archivePathSuffix: ""
+      urlSuffix: .tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivePathSuffix: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/386
+    - linux/amd64
+    - linux/arm64
     - windows/386
     - windows/amd64
     - windows/arm64
@@ -1080,6 +1111,14 @@ url_checksums:
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_linux_amd64.tar.gz: 4b45f44f339f5a0139b7a82267fabb47a4685ac183f5f41b5121c080ca94ca1e
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_windows_386.tar.gz: 6ab13c35069eeeea59b451da602ece28bb76202bd184d532cb2c5eb11a65bdea
   https://github.com/WillAbides/go-test2action/releases/download/v0.0.0/go-test2action_0.0.0_windows_amd64.tar.gz: 8ad522ae71d08ec11612b96ba00f3f71600d8762818dab9c876daf14fea4ef5a
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_darwin_amd64.tar.gz: df5dbf9c8b282d8209a8baddfe3410c5b3ace87bdce808fce0a0d49356c9ff4d
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_darwin_arm64.tar.gz: c03133084f87e064f9801d4b2a9739be755fcee5875382f4da0fc10cd8306dfb
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_linux_386.tar.gz: 7feb6205f64b7285bbd05f851774fb5e277094750eb4147394779ebf3e6f7efa
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_linux_amd64.tar.gz: 1a7885a9854d2455dce1be3bc19f2d61a61ebdc99e2a98e4969ab1965c2a64ad
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_linux_arm64.tar.gz: 5d2dba9db5463e52692382f40933ff4e43b6bd15ea3680413a0d5ac66121a9be
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_windows_386.tar.gz: 14596907f25742baa217c477e8dd30b2ea26f50d509f1e8dd1b81b20be6dde8a
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_windows_amd64.tar.gz: 5ce8cddc9bdbd19adde3104397d698ecca7eb8ad2ac540cc709a15821f9b2609
+  https://github.com/WillAbides/handcrafted/releases/download/v0.0.0/handcrafted_0.0.0_windows_arm64.tar.gz: 6c07c24fd3adfac01dfbe9a121ede4d8fe615ec72fd0979b3830148557957a37
   https://github.com/WillAbides/semver-next/releases/download/v0.12.0/semver-next_0.12.0_darwin_amd64.tar.gz: 526632e6d0d2f7337c99a2c617faff268edc2d66617bb45fc8aadcc93ed734c4
   https://github.com/WillAbides/semver-next/releases/download/v0.12.0/semver-next_0.12.0_darwin_arm64.tar.gz: 6cf5a5cb10694e3659e6437d46cb40e9540f904c8baba894eeaceb056ca7ac02
   https://github.com/WillAbides/semver-next/releases/download/v0.12.0/semver-next_0.12.0_linux_386.tar.gz: 8e5b9d318456eff7c22c0aee5a7e17cc38d512726e6c808c56c829621a70d8d6
