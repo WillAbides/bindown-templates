@@ -91,6 +91,10 @@ dependencies:
     template: prototool
     vars:
       version: 1.10.0
+  semantic-release:
+    template: semantic-release
+    vars:
+      version: 2.27.1
   semver-next:
     template: semver-next
     vars:
@@ -843,6 +847,30 @@ templates:
     - darwin/amd64
     - darwin/arm64
     - linux/amd64
+  semantic-release:
+    homepage: https://github.com/go-semantic-release/semantic-release
+    description: "semantic-release written in Go"
+    url: https://github.com/go-semantic-release/semantic-release/releases/download/v{{.version}}/semantic-release_v{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
+    archive_path: semantic-release_v{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
+    bin: semantic-release
+    vars:
+      archivePathSuffix: ""
+      urlSuffix: ""
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          urlSuffix: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm64
+    - windows/amd64
   semver-next:
     homepage: https://github.com/WillAbides/semver-next
     url: https://github.com/WillAbides/semver-next/releases/download/v{{.version}}/semver-next_{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
@@ -1153,6 +1181,11 @@ url_checksums:
   https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_windows_386.zip: 00dadecb4caf369705faa1f4cc244a1a5b5e477dea49d2a4aac991853891480a
   https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_windows_amd64.zip: 12c33a13c72300c54f1ac2c926d879cec8ed65dda778cf53f6cb20a4de1d1ad2
   https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_windows_arm64.zip: 274ba569dc9cb41653426ae556f9ea7e98fa2f4e9c162c1c8176c929698134bd
+  https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_darwin_amd64: 6734bda4eb4152882e5001a3e013e76f5cc714cfeb17d96eb54bb15cea77cac5
+  https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_darwin_arm64: aa22dbe869803867c1ada29812b1934e0dddbf1e0bf15f475045fa3687962aa1
+  https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_linux_amd64: 870d12d34c303eaff8520504a26fdf2bc3e84a4e97d1d43cad1b3b7c080e83e9
+  https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_linux_arm64: 9305da5995f4c18a0e4434a49bc4f8b34e9c9967436f4bc35025ba33c90b5752
+  https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_windows_amd64.exe: 8974c9c5c2ad9ad72e479fc87c18bc5eeeae57b627f8ac1c9a0254143b27865b
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_darwin_amd64.tar.gz: 938649db27055ec85bede32ccb95ff82f82af3c90a084ee52687a92066bcca92
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_darwin_arm64.tar.gz: 67a4a597dd759e186e17400cbc273be99c8cffc590335381134b3e933b409c83
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_linux_386.tar.gz: 5c956c808a1c1dc2161bdcf91818e658291b6629449592148851cf6db283c5e8
