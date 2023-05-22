@@ -11,6 +11,10 @@ dependencies:
     template: gh
     vars:
       version: 2.28.0
+  git-describe-semver:
+    template: git-describe-semver
+    vars:
+      version: 0.3.11
   go:
     template: go
     vars:
@@ -244,6 +248,30 @@ templates:
     - linux/amd64
     - linux/arm64
     - windows/386
+    - windows/amd64
+    - windows/arm64
+  git-describe-semver:
+    homepage: https://github.com/choffmeister/git-describe-semver
+    url: https://github.com/choffmeister/git-describe-semver/releases/download/v{{.version}}/git-describe-semver_{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
+    archive_path: git-describe-semver{{.archivePathSuffix}}
+    bin: git-describe-semver
+    vars:
+      archivePathSuffix: ""
+      urlSuffix: .tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivePathSuffix: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/amd64
+    - linux/arm64
     - windows/amd64
     - windows/arm64
   go:
@@ -849,7 +877,7 @@ templates:
     - linux/amd64
   semantic-release:
     homepage: https://github.com/go-semantic-release/semantic-release
-    description: "semantic-release written in Go"
+    description: semantic-release written in Go
     url: https://github.com/go-semantic-release/semantic-release/releases/download/v{{.version}}/semantic-release_v{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
     archive_path: semantic-release_v{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
     bin: semantic-release
@@ -1173,6 +1201,12 @@ url_checksums:
   https://github.com/bufbuild/buf/releases/download/v1.18.0/buf-Linux-x86_64.tar.gz: 916e78f9e2c77991b54e3fc866e06323f0b22aafdf1a94f78458538d843ef1f7
   https://github.com/bufbuild/buf/releases/download/v1.18.0/buf-Windows-arm64.exe: 5b7d1b747c3f8a17696fd683884cccfb254824b8f33958346bf2c941390f9d26
   https://github.com/bufbuild/buf/releases/download/v1.18.0/buf-Windows-x86_64.exe: 9a838330b49838e4481fe40e11c5f6d094d2b1b46aa8bf3bbdda9763256d8df0
+  https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_darwin_amd64.tar.gz: 98fb8f02bfa0367e6a4dc6004dab0ca50df111422cf5e89d424d5ec3c04c29f7
+  https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_darwin_arm64.tar.gz: c87c1f1acbc246beb674de43d8932a51f4f3019b176986f06058de65097048b7
+  https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_linux_amd64.tar.gz: cb42ef4d5ee530508b31660c50d724fa1e96b568a612a226eea76b417ffd2c7a
+  https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_linux_arm64.tar.gz: d72dcff5b231603efdea4c4168e4c30a198e2249598219d78703ac6e3d497a18
+  https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_windows_amd64.tar.gz: ad54b0a0b942285f6e008d7aa5cc0a7ed8d10903f0eb81dba400ad36366b3ad1
+  https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_windows_arm64.tar.gz: aa3f47397899d16d653290e06218089ad780d16a7aed3373f353eadf99ba40d5
   https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_386.tar.gz: 3334b8745da5481c3609b72e0617927fda23af651f84badf868fe9139972bdc9
   https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_amd64.tar.gz: 532633d851557d1da80d59addcb3f7ba20ba0341c8990d32d13f4af73ebfb3f0
   https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_arm64.tar.gz: 89b0351d2421c10dd27e91d8aee13a97afe95039507a21a6c0a3a899e2ac1d9c
