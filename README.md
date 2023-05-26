@@ -14,6 +14,7 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 - [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator) - A tool to use AWS IAM credentials to authenticate to a Kubernetes cluster
 - [buf](https://github.com/bufbuild/buf) - A new way of working with Protocol Buffers.
 - [gh](https://github.com/cli/cli) - GitHub’s official command line tool
+- [git-describe-semver](https://github.com/choffmeister/git-describe-semver)
 - [go](https://golang.org/) - The Go programming language
 - [go-test2action](https://github.com/willabides/go-test2action) - formats go test failures as errors in github action workflows
 - [gofumpt](https://github.com/mvdan/gofumpt) - A stricter gofmt
@@ -34,7 +35,9 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 - [protoc-gen-buf-lint](https://buf.build/docs/reference/protoc-plugins/#lint)
 - [protoc-gen-go](https://github.com/protocolbuffers/protobuf-go) - Go support for Google's protocol buffers
 - [prototool](https://github.com/uber/prototool) - Your Swiss Army Knife for Protocol Buffers
+- [semantic-release](https://github.com/go-semantic-release/semantic-release) - semantic-release written in Go
 - [semver-next](https://github.com/WillAbides/semver-next)
+- [semver-prev](https://github.com/willabides/semver-prev)
 - [shellcheck](https://github.com/koalaman/shellcheck) - ShellCheck, a static analysis tool for shell scripts
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with bash support; includes shfmt
 - [skeema](https://github.com/skeema/skeema) - Declarative pure-SQL schema management for MySQL and MariaDB
