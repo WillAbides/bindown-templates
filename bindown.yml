@@ -103,6 +103,10 @@ dependencies:
     template: semver-next
     vars:
       version: 0.12.0
+  semver-prev:
+    template: semver-prev
+    vars:
+      version: 0.0.1
   shellcheck:
     template: shellcheck
     vars:
@@ -925,6 +929,32 @@ templates:
     - windows/386
     - windows/amd64
     - windows/arm64
+  semver-prev:
+    homepage: https://github.com/willabides/semver-prev
+    url: https://github.com/WillAbides/semver-prev/releases/download/v{{.version}}/semver-prev_{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
+    archive_path: semver-prev{{.archivePathSuffix}}
+    bin: semver-prev
+    vars:
+      archivePathSuffix: ""
+      urlSuffix: .tar.gz
+    required_vars:
+    - version
+    overrides:
+    - matcher:
+        os:
+        - windows
+      dependency:
+        vars:
+          archivePathSuffix: .exe
+    systems:
+    - darwin/amd64
+    - darwin/arm64
+    - linux/386
+    - linux/amd64
+    - linux/arm64
+    - windows/386
+    - windows/amd64
+    - windows/arm64
   shellcheck:
     homepage: https://github.com/koalaman/shellcheck
     description: ShellCheck, a static analysis tool for shell scripts
@@ -1183,6 +1213,14 @@ url_checksums:
   https://github.com/WillAbides/semver-next/releases/download/v0.12.0/semver-next_0.12.0_windows_386.tar.gz: 6a5085a33741e33358e4fc372643598b34c03f42a78a22de244b3f1973949a8b
   https://github.com/WillAbides/semver-next/releases/download/v0.12.0/semver-next_0.12.0_windows_amd64.tar.gz: 8961cc4321fa44e80022e68b1e25125cb8d61827205f751ac3315da393b8aaae
   https://github.com/WillAbides/semver-next/releases/download/v0.12.0/semver-next_0.12.0_windows_arm64.tar.gz: a6d41e3c57df5ecd1c012dbaa884c935f2993c3747b4c98ba35e426b51eea08b
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_darwin_amd64.tar.gz: de2902df5f99e6db91b143199446ccf9c7bdacd37980fca55f71e2da35211d0f
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_darwin_arm64.tar.gz: 367eaccc368bec6119d47cc78d0ad743cc8709dc1900e8f170c5314418c3a14e
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_linux_386.tar.gz: 79a3b5fabc85df35883e0fb2fdfe57807a1e5ff596f2a7ec8208ea42a6790f4e
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_linux_amd64.tar.gz: 1c1ab5926e9548659bdc1786cf1da9f62f80ae5314c5ccdf71123767e4f4da1d
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_linux_arm64.tar.gz: 8e5b334e8fe0acb19ab14132f246e27d812b34095b9594c18800224ceb189917
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_windows_386.tar.gz: 02216e9a28b6fbd792c20d8e326049d0baab8d210605e8b603afa7269bf2af4f
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_windows_amd64.tar.gz: 31bc3527ad74cdfda9d5868287141f44e72e8fbd1709c4f6af05205f9eb8bb8b
+  https://github.com/WillAbides/semver-prev/releases/download/v0.0.1/semver-prev_0.0.1_windows_arm64.tar.gz: c6ea8ecc3eeba3427b794082caf39ca50c41c76d64a04e2369a5ccde71150fd6
   https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_darwin_arm64.tar.gz: 7adeaf057809ef756b6f290c2e0557e86c1d04718239166a9ef0298db6fe5b27
   https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_darwin_x86_64.tar.gz: 99392d5cc3d174a18b68d9cce6872dc6c7216d58b6913e4f6a51274cffa95583
   https://github.com/ahmetb/kubectx/releases/download/v0.9.4/kubectx_v0.9.4_linux_arm64.tar.gz: 5fab3c0624a83cf8fff5c34d90f854af6fa8b501ed63306aaf5355303ae884ed
