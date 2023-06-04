@@ -1,3 +1,4 @@
+cache: .bindown
 dependencies:
   aws-iam-authenticator:
     template: aws-iam-authenticator
@@ -6,11 +7,11 @@ dependencies:
   buf:
     template: buf
     vars:
-      version: 1.18.0
+      version: 1.20.0
   gh:
     template: gh
     vars:
-      version: 2.28.0
+      version: 2.30.0
   git-describe-semver:
     template: git-describe-semver
     vars:
@@ -23,6 +24,10 @@ dependencies:
     template: go-test2action
     vars:
       version: 0.0.0
+  gofmt:
+    template: gofmt
+    vars:
+      version: 1.20.4
   gofumpt:
     template: gofumpt
     vars:
@@ -30,7 +35,7 @@ dependencies:
   golangci-lint:
     template: golangci-lint
     vars:
-      version: 1.52.2
+      version: 1.53.2
   goreleaser:
     template: goreleaser
     vars:
@@ -46,7 +51,7 @@ dependencies:
   helmfile:
     template: helmfile
     vars:
-      version: 0.144.0
+      version: 0.154.0
   jq:
     template: jq
     vars:
@@ -280,12 +285,13 @@ templates:
   go:
     homepage: https://golang.org/
     description: The Go programming language
-    url: https://dl.google.com/go/go{{.version}}.{{.os}}-{{.arch}}{{.urlSuffix}}
-    archive_path: go/bin/go{{.archivePathSuffix}}
-    bin: go
+    url: https://go.dev/dl/go{{.version}}.{{.os}}-{{.arch}}{{.urlSuffix}}
+    archive_path: go/bin/{{.binName}}{{.archivePathSuffix}}
+    bin: '{{.binName}}'
     link: true
     vars:
       archivePathSuffix: ""
+      binName: go
       urlSuffix: .tar.gz
     overrides:
       - matcher:
@@ -295,6 +301,9 @@ templates:
           vars:
             archivePathSuffix: .exe
             urlSuffix: .zip
+    substitutions:
+      arch:
+        arm: armv6l
     systems:
       - darwin/amd64
       - darwin/arm64
@@ -302,6 +311,7 @@ templates:
       - freebsd/amd64
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - linux/ppc64le
       - linux/s390x
@@ -344,6 +354,12 @@ templates:
       - windows/amd64
     required_vars:
       - version
+  gofmt:
+    homepage: https://golang.org/
+    description: Formats go code
+    template: go
+    vars:
+      binName: gofmt
   gofumpt:
     homepage: https://github.com/mvdan/gofumpt
     description: A stricter gofmt
@@ -365,13 +381,14 @@ templates:
       - darwin/arm64
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - windows/386
       - windows/amd64
     required_vars:
       - version
   golangci-lint:
-    homepage: https://github.com/golangci/golangci-lint
+    homepage: https://golangci-lint.run
     description: Fast linters Runner for Go
     url: https://github.com/golangci/golangci-lint/releases/download/v{{.version}}/golangci-lint-{{.version}}-{{.os}}-{{.arch}}{{.urlSuffix}}
     archive_path: golangci-lint-{{.version}}-{{.os}}-{{.arch}}/golangci-lint{{.archivePathSuffix}}
@@ -387,13 +404,21 @@ templates:
           vars:
             archivePathSuffix: .exe
             urlSuffix: .zip
+          substitutions:
+            arch:
+              arm: armv6
+    substitutions:
+      arch:
+        arm: armv6
     systems:
       - darwin/amd64
       - darwin/arm64
       - freebsd/386
       - freebsd/amd64
+      - freebsd/arm
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - linux/loong64
       - linux/mips64
@@ -403,13 +428,15 @@ templates:
       - linux/s390x
       - netbsd/386
       - netbsd/amd64
+      - netbsd/arm
       - windows/386
       - windows/amd64
+      - windows/arm
       - windows/arm64
     required_vars:
       - version
   goreleaser:
-    homepage: https://github.com/goreleaser/goreleaser
+    homepage: https://goreleaser.com
     description: Deliver Go binaries as fast and easily as possible
     url: https://github.com/goreleaser/goreleaser/releases/download/v{{.version}}/goreleaser_{{.os}}_{{.arch}}{{.urlSuffix}}
     archive_path: goreleaser{{.archivePathSuffix}}
@@ -435,6 +462,7 @@ templates:
       arch:
         "386": i386
         amd64: x86_64
+        arm: armv7
       os:
         darwin: Darwin
         linux: Linux
@@ -443,6 +471,7 @@ templates:
       - darwin/arm64
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - linux/ppc64
       - windows/386
@@ -499,6 +528,7 @@ templates:
       - darwin/arm64
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - linux/ppc64le
       - linux/s390x
@@ -506,21 +536,21 @@ templates:
     required_vars:
       - version
   helmfile:
-    homepage: https://github.com/roboll/helmfile
-    description: Deploy Kubernetes Helm Charts
-    url: https://github.com/roboll/helmfile/releases/download/v{{.version}}/helmfile_{{.os}}_{{.arch}}{{.urlSuffix}}
-    archive_path: helmfile_{{.os}}_{{.arch}}{{.urlSuffix}}
+    homepage: https://helmfile.readthedocs.io
+    description: Declaratively deploy your Kubernetes manifests, Kustomize configs, and Charts as Helm releases. Generate all-in-one manifests for use with ArgoCD.
+    url: https://github.com/helmfile/helmfile/releases/download/v{{.version}}/helmfile_{{.version}}_{{.os}}_{{.arch}}{{.urlSuffix}}
+    archive_path: helmfile{{.archivePathSuffix}}
     bin: helmfile
     vars:
       archivePathSuffix: ""
-      urlSuffix: ""
+      urlSuffix: .tar.gz
     overrides:
       - matcher:
           os:
             - windows
         dependency:
           vars:
-            urlSuffix: .exe
+            archivePathSuffix: .exe
     systems:
       - darwin/amd64
       - darwin/arm64
@@ -529,6 +559,7 @@ templates:
       - linux/arm64
       - windows/386
       - windows/amd64
+      - windows/arm64
     required_vars:
       - version
   jq:
@@ -898,6 +929,7 @@ templates:
       - darwin/amd64
       - darwin/arm64
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - windows/amd64
     required_vars:
@@ -955,7 +987,7 @@ templates:
     required_vars:
       - version
   shellcheck:
-    homepage: https://github.com/koalaman/shellcheck
+    homepage: https://www.shellcheck.net
     description: ShellCheck, a static analysis tool for shell scripts
     url: https://github.com/koalaman/shellcheck/releases/download/v{{.version}}/shellcheck-v{{.version}}.{{.os}}.{{.arch}}{{.urlSuffix}}
     archive_path: shellcheck-v{{.version}}/shellcheck{{.archivePathSuffix}}
@@ -982,11 +1014,13 @@ templates:
     substitutions:
       arch:
         amd64: x86_64
+        arm: armv6hf
         arm64: aarch64
     systems:
       - darwin/amd64
       - darwin/arm64
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - windows/amd64
     required_vars:
@@ -1012,6 +1046,7 @@ templates:
       - darwin/arm64
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - windows/386
       - windows/amd64
@@ -1079,8 +1114,10 @@ templates:
       - darwin/amd64
       - darwin/arm64
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - windows/amd64
+      - windows/arm
       - windows/arm64
     required_vars:
       - version
@@ -1105,8 +1142,10 @@ templates:
       - darwin/arm64
       - freebsd/386
       - freebsd/amd64
+      - freebsd/arm
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - openbsd/386
       - openbsd/amd64
@@ -1137,9 +1176,11 @@ templates:
       - darwin/amd64
       - darwin/arm64
       - freebsd/386
+      - freebsd/arm
       - freebsd/amd64
       - linux/386
       - linux/amd64
+      - linux/arm
       - linux/arm64
       - linux/mips
       - linux/mips64
@@ -1150,6 +1191,7 @@ templates:
       - linux/s390x
       - netbsd/386
       - netbsd/amd64
+      - netbsd/arm
       - openbsd/386
       - openbsd/amd64
       - windows/386
@@ -1157,18 +1199,6 @@ templates:
     required_vars:
       - version
 url_checksums:
-  https://dl.google.com/go/go1.20.4.darwin-amd64.tar.gz: 242b099b5b9bd9c5d4d25c041216bc75abcdf8e0541aec975eeabcbce61ad47f
-  https://dl.google.com/go/go1.20.4.darwin-arm64.tar.gz: 61bd4f7f2d209e2a6a7ce17787fc5fea52fb11cc9efb3d8471187a8b39ce0dc9
-  https://dl.google.com/go/go1.20.4.freebsd-386.tar.gz: 66b1646786304553c5f3208d4b5ed4b3f227293728bfa5c7b5d9a3c5fa1312cb
-  https://dl.google.com/go/go1.20.4.freebsd-amd64.tar.gz: 24ee729660372fb408c34a11284daa6e17e43e1db4a5bee2a96b4b6d291edfc5
-  https://dl.google.com/go/go1.20.4.linux-386.tar.gz: 5dfa3db9433ef6a2d3803169fb4bd2f4505414881516eb9972d76ab2e22335a7
-  https://dl.google.com/go/go1.20.4.linux-amd64.tar.gz: 698ef3243972a51ddb4028e4a1ac63dc6d60821bf18e59a807e051fee0a385bd
-  https://dl.google.com/go/go1.20.4.linux-arm64.tar.gz: 105889992ee4b1d40c7c108555222ca70ae43fccb42e20fbf1eebb822f5e72c6
-  https://dl.google.com/go/go1.20.4.linux-ppc64le.tar.gz: 8c6f44b96c2719c90eebabe2dd866f9c39538648f7897a212cac448587e9a408
-  https://dl.google.com/go/go1.20.4.linux-s390x.tar.gz: 57f999a4e605b1dfa4e7e58c7dbae47d370ea240879edba8001ab33c9a963ebf
-  https://dl.google.com/go/go1.20.4.windows-386.zip: 8f2c5574bb822cc02d3bad4d449e4d2a2de341663df63ad0e7cb0b650a321dab
-  https://dl.google.com/go/go1.20.4.windows-amd64.zip: e7528da720f470b711fbd826814167a5fe1bc02a479ab1958dcf839a8294e6d2
-  https://dl.google.com/go/go1.20.4.windows-arm64.zip: 691b292c8284f31864b998f5bef8bc6d639799dec2bc319bfbe67dc6986ae02f
   https://dl.k8s.io/v1.27.1/bin/darwin/amd64/kubectl: 136f73ede0d52c7985d299432236f891515c050d58d71b4a7d39c45085020ad8
   https://dl.k8s.io/v1.27.1/bin/darwin/arm64/kubectl: a2029331fa70450a631506c83bb27ae95cc9fdb4b21efb81fde81c689d922ceb
   https://dl.k8s.io/v1.27.1/bin/linux/386/kubectl: 14615b02a0e9b689233f756d3314f9bd24e80603eb365ed6e17acd4098772def
@@ -1183,6 +1213,7 @@ url_checksums:
   https://get.helm.sh/helm-v3.11.3-darwin-arm64.tar.gz: 267e4d50b68e8854b9cc44517da9ab2f47dec39787fed9f7eba42080d61ac7f8
   https://get.helm.sh/helm-v3.11.3-linux-386.tar.gz: 09c111400d953eda371aaa6e5f0f65acc7af6c6b31a9f327414bb6f0756ea215
   https://get.helm.sh/helm-v3.11.3-linux-amd64.tar.gz: ca2d5d40d4cdfb9a3a6205dd803b5bc8def00bd2f13e5526c127e9b667974a89
+  https://get.helm.sh/helm-v3.11.3-linux-arm.tar.gz: 0816db0efd033c78c3cc1c37506967947b01965b9c0739fe13ec2b1eea08f601
   https://get.helm.sh/helm-v3.11.3-linux-arm64.tar.gz: 9f58e707dcbe9a3b7885c4e24ef57edfb9794490d72705b33a93fa1f3572cce4
   https://get.helm.sh/helm-v3.11.3-linux-ppc64le.tar.gz: 9f0a8299152ec714cee7bdf61066ba83d34d614c63e97843d30815b55c942612
   https://get.helm.sh/helm-v3.11.3-linux-s390x.tar.gz: e8b0682166628a9c16bf185d60c3d766a8ff814bff362de88280ef202148fbec
@@ -1234,23 +1265,30 @@ url_checksums:
   https://github.com/bufbuild/buf/releases/download/v1.18.0/buf-Linux-x86_64.tar.gz: 916e78f9e2c77991b54e3fc866e06323f0b22aafdf1a94f78458538d843ef1f7
   https://github.com/bufbuild/buf/releases/download/v1.18.0/buf-Windows-arm64.exe: 5b7d1b747c3f8a17696fd683884cccfb254824b8f33958346bf2c941390f9d26
   https://github.com/bufbuild/buf/releases/download/v1.18.0/buf-Windows-x86_64.exe: 9a838330b49838e4481fe40e11c5f6d094d2b1b46aa8bf3bbdda9763256d8df0
+  https://github.com/bufbuild/buf/releases/download/v1.20.0/buf-Darwin-arm64.tar.gz: 82ab0767a156c22f8e04516d2aed0b2478d86857b6a2bc61e71bd6f58dfbe1ed
+  https://github.com/bufbuild/buf/releases/download/v1.20.0/buf-Darwin-x86_64.tar.gz: a548dc4384608f34664131eb6f7809a896612c372a9c78d907e37b9a1ec030ea
+  https://github.com/bufbuild/buf/releases/download/v1.20.0/buf-Linux-aarch64.tar.gz: 4538a2c96aea26285c0711f8eb9b34d755cea02264c5bd1d5ca5213deba642c1
+  https://github.com/bufbuild/buf/releases/download/v1.20.0/buf-Linux-x86_64.tar.gz: 23ca3ba47e77de9b74cf6035d573a578baaa5124a28b64d8ca332f4d7ab65f26
+  https://github.com/bufbuild/buf/releases/download/v1.20.0/buf-Windows-arm64.exe: 82c7ba4e961ce14034eaa4764b2282286336f2d8ec30dff3d42e759826a002ae
+  https://github.com/bufbuild/buf/releases/download/v1.20.0/buf-Windows-x86_64.exe: e4fc9dcbbced323eb479e0e6f9fc5f7f23e72e795a347998c0758f57a494c5b0
   https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_darwin_amd64.tar.gz: 98fb8f02bfa0367e6a4dc6004dab0ca50df111422cf5e89d424d5ec3c04c29f7
   https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_darwin_arm64.tar.gz: c87c1f1acbc246beb674de43d8932a51f4f3019b176986f06058de65097048b7
   https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_linux_amd64.tar.gz: cb42ef4d5ee530508b31660c50d724fa1e96b568a612a226eea76b417ffd2c7a
   https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_linux_arm64.tar.gz: d72dcff5b231603efdea4c4168e4c30a198e2249598219d78703ac6e3d497a18
   https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_windows_amd64.tar.gz: ad54b0a0b942285f6e008d7aa5cc0a7ed8d10903f0eb81dba400ad36366b3ad1
   https://github.com/choffmeister/git-describe-semver/releases/download/v0.3.11/git-describe-semver_0.3.11_windows_arm64.tar.gz: aa3f47397899d16d653290e06218089ad780d16a7aed3373f353eadf99ba40d5
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_386.tar.gz: 3334b8745da5481c3609b72e0617927fda23af651f84badf868fe9139972bdc9
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_amd64.tar.gz: 532633d851557d1da80d59addcb3f7ba20ba0341c8990d32d13f4af73ebfb3f0
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_linux_arm64.tar.gz: 89b0351d2421c10dd27e91d8aee13a97afe95039507a21a6c0a3a899e2ac1d9c
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_macOS_amd64.zip: 1e50a63ceee4ecd5749184daaeab9f769ad39aa1f42af069a33760d694e4420f
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_macOS_arm64.zip: bc6ae4efbf2eebcbfa7db17207e72ae33519ec240ffcc19f81b858a94612b04c
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_windows_386.zip: 00dadecb4caf369705faa1f4cc244a1a5b5e477dea49d2a4aac991853891480a
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_windows_amd64.zip: 12c33a13c72300c54f1ac2c926d879cec8ed65dda778cf53f6cb20a4de1d1ad2
-  https://github.com/cli/cli/releases/download/v2.28.0/gh_2.28.0_windows_arm64.zip: 274ba569dc9cb41653426ae556f9ea7e98fa2f4e9c162c1c8176c929698134bd
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_linux_386.tar.gz: b44c30f3662c27f60d64d420f4c8fe62d5670592de894faa245405c710a07e1c
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_linux_amd64.tar.gz: 5aee45bd42a27f5be309373c326e45cbcc7f04591b1798581a3094af767225b7
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_linux_arm64.tar.gz: 3ef741bcc1ae8bb975adb79a78e26ab7f18a246197f193aaa8cb5c3bdc373a3f
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_macOS_amd64.zip: 6b91c446586935de0e9df82da58309b2d1b83061cfcd4cc173124270f1277ca7
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_macOS_arm64.zip: 32a71652367f3cf664894456e4c4f655faa95964d71cc3a449fbf64bdce1fff1
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_windows_386.zip: 6b8270ea266b4afac5ea24a3bce3694c824769198694c52262ecfcb750106470
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_windows_amd64.zip: 7d466686978e3c93e1a412229a77921288862cec183e94ad06cd36bfcd34ebaf
+  https://github.com/cli/cli/releases/download/v2.30.0/gh_2.30.0_windows_arm64.zip: 8883f41edf2e9c92c035d886bd9883bbacca37db7b79a0564f3838fd98f04ce0
   https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_darwin_amd64: 6734bda4eb4152882e5001a3e013e76f5cc714cfeb17d96eb54bb15cea77cac5
   https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_darwin_arm64: aa22dbe869803867c1ada29812b1934e0dddbf1e0bf15f475045fa3687962aa1
   https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_linux_amd64: 870d12d34c303eaff8520504a26fdf2bc3e84a4e97d1d43cad1b3b7c080e83e9
+  https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_linux_arm: ff1d3163305ee1984397e85cf735756049e8ca89ff505aed26d8bd297ac35c25
   https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_linux_arm64: 9305da5995f4c18a0e4434a49bc4f8b34e9c9967436f4bc35025ba33c90b5752
   https://github.com/go-semantic-release/semantic-release/releases/download/v2.27.1/semantic-release_v2.27.1_windows_amd64.exe: 8974c9c5c2ad9ad72e479fc87c18bc5eeeae57b627f8ac1c9a0254143b27865b
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_darwin_amd64.tar.gz: 938649db27055ec85bede32ccb95ff82f82af3c90a084ee52687a92066bcca92
@@ -1260,35 +1298,49 @@ url_checksums:
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_linux_arm64.tar.gz: 4b2d4e08bfe773d702ae239bac5d227d1435fc630a155e72b17d12cbafdbb4d5
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_windows_386.tar.gz: e4102b9eca337b0e3705ade4ff7e258340b419e5b38be04b5d240b955d2cb3f8
   https://github.com/golang/mock/releases/download/v1.6.0/mock_1.6.0_windows_amd64.tar.gz: 12f760cc521b45d0726de11512ed04aea2424d067312f39c926f96b085002590
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-darwin-amd64.tar.gz: e57f2599de73c4da1d36d5255b9baec63f448b3d7fb726ebd3cd64dabbd3ee4a
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-darwin-arm64.tar.gz: 89e523d45883903cfc472ab65621073f850abd4ffbb7720bbdd7ba66ee490bc8
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-freebsd-386.tar.gz: a7f076d0fb50e0f5bc24d0f3b2567f2cfe864441e6ad20323189b7fde7cc065d
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-freebsd-amd64.tar.gz: d9b5820b491e317fb1360775441d68bd3dc2f303439da5b6d536df23977e28c9
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-386.tar.gz: b2249e43e1624486398f41700dbe4094a4222bf50b2b1b3a740323adb9a1b66f
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-amd64.tar.gz: c9cf72d12058a131746edd409ed94ccd578fbd178899d1ed41ceae3ce5f54501
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-arm64.tar.gz: fc09a97f8888809fab83a316f7da70c8ed74d4863b7eed7d872cec41911a55e8
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-loong64.tar.gz: a1a74747a196d4ccd2394ea8a461508eb2edf1eb5a88010611debf572991961d
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-mips64le.tar.gz: d03f2b331b5139eddea5db2b49066d10a90094747b08d72d7b2d61cf91c79a27
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-mips64.tar.gz: d679adad29603ed7549372b64077cccad784e404deffe5c1e9495a06659cff33
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-ppc64le.tar.gz: d91e8cb60920cf0e46958ed917fcdd059738c00d162189c2e878424ffc8ada75
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-riscv64.tar.gz: 4bcbb4cf34bf3c8ae1ca880d12516a999499189326621599f8362ededd6e4229
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-linux-s390x.tar.gz: 715dc0f0cf3538c3b2c75f084dde8dcdc3485b3494f42a6d0d9c0dc61e62b5a8
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-netbsd-386.tar.gz: ebfb5b643ba73ef6007236b90f863ae49fc34fd366682c971b7d1308ab28f642
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-netbsd-amd64.tar.gz: 3abc8ad30b336ccbe3c5e3c65fa146f5b12d8e81e644345fa8d51cdbaa8cb570
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-windows-386.zip: 40a2645b4c7bd94c16618eb0f12b32cd54c17e5620f761cf477b256d3622f299
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-windows-amd64.zip: 40b40002e07db81628d94108265525052c58fc9ce358bef26a36d27f0aea3d87
-  https://github.com/golangci/golangci-lint/releases/download/v1.52.2/golangci-lint-1.52.2-windows-arm64.zip: 6891597bedbcd7e530d08ed198bab7eeb9b23f3f8161dc6e87505b783cb11593
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-darwin-amd64.tar.gz: a4e83f5bfe52f42134c9783aa68ba31104c36e2ad4c221a3c77510dda66ae81c
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-darwin-arm64.tar.gz: 63f6c3dab479dac20f39d4a91c4a2c019c054968e2d044f03ee47a3e41253623
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-freebsd-386.tar.gz: 09f85372f3e10164772e2b73539b93d9bca2309e9c984aa37a659aafc782c336
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-freebsd-amd64.tar.gz: e5d1131aaff7c141223980bff26a62075e6b28b7d6dc8fb011ddc809c48354f0
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-freebsd-armv6.tar.gz: c7073923df18373a1b242bd69305b8ec3adbfc3ca7872ce3e855759e33a2eafd
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-386.tar.gz: afcfd537abf78387a4d077e83caf12e9a8a2b515d7fa5d6ead3a6038f4d6b7e3
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-amd64.tar.gz: 2298f73b9bc03b88b91fee06c5d519fc7f9d7f328e2c388615bbd7e85a9d6cae
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-arm64.tar.gz: c9308fac5217ab83de0966291e119f9643cd185ca9901fde9c67f61641da49e5
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-armv6.tar.gz: 530fe222257b5fe206935c1cf2e5787b23cf11bcd20354a09e9aa2c7457a6466
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-loong64.tar.gz: 520088af8efca32dd7a5596ae668905a687d5f06301349d71e9d874d052a7f64
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-mips64le.tar.gz: 0bec4fba6d304abc4b9bda5366bdd8ded9355c8056de0e4ecaf762b143f0f462
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-mips64.tar.gz: 1fbb8ada9d8cc3f89998b4dce00965ad96668182b630df1c37fe4adecaa520d4
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-ppc64le.tar.gz: 707b4680cb92e0bb1e9bc9e21ff45bd1dd19c974193a83c0e93642f653aa04eb
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-riscv64.tar.gz: d62cc044e15e07cea0a1f771780d59c3f8106371f691aa7c40339f8a18a28acd
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-linux-s390x.tar.gz: 3d8cc6f3862af2b908a7b9dcddf006e42bb49b0cf8da5fc83f745eef38f02b65
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-netbsd-386.tar.gz: 22596bbb6e6f5f9747902792bbf116088539b97e3997fa8bff8c8348763446bc
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-netbsd-amd64.tar.gz: 4dea3e8530d8b76f0dcd356868807441c8a0085da240256b1a860987e0087771
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-netbsd-armv6.tar.gz: a09a5620884ee234c1f0c91624a0c34568916101194367f854341dcf2ca19fbe
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-windows-386.zip: a4ae07b2b9b96d1d08cd868e2d63abf461b5356bd7bae5d62fdbc98ee24c5e55
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-windows-amd64.zip: 7bf18716b68c4d5a99d88d3adc4aab642a7045813afa212db2aac0d56db33e97
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-windows-arm64.zip: e0cf9da4dfdcf58322f10cee1ff8a64c817a0f26b2574cc16f30920cfaaa4e4f
+  https://github.com/golangci/golangci-lint/releases/download/v1.53.2/golangci-lint-1.53.2-windows-armv6.zip: 4a3d239d495c4c6169b76991f25abd9676f1f8cc3d9dbe92b9353a2bea146c4b
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Darwin_arm64.tar.gz: 7eec9f4d0b86b2c9c9f6af1770a11315998bd4d4617633b0a73eeb036e97393e
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Darwin_x86_64.tar.gz: 95338eed333347152e23837b68a8c6ce0c62b9f5abb68bd5b4b08178766400b9
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Linux_arm64.tar.gz: ef22fb7a6e11b70cec714440b2649ac2abe6f17eb2932cfca6dbc5b15fb3b240
+  https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Linux_armv7.tar.gz: 55ea2996bca4469704ed79d9d7d9e01b686338f830495d212373c0b347dcd21a
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Linux_i386.tar.gz: 2295348146310fd939b151fcdc7187c02a124af1e738696d0b08f407ad42c36e
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Linux_ppc64.tar.gz: e4da9725dbb5976e411385e7f9b80d6c7be3e8d58d6d1a20790ec05431e5c93e
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Linux_x86_64.tar.gz: 811e0c63e347f78f3c8612a19ca8eeb564eb45f0265ce3f38aec39c8fdbcfa10
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Windows_arm64.zip: eb6c7cc576e63f45bfd13d9d795941a33181676f2f1f743e00ea83f773cae49c
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Windows_i386.zip: 64da246543ae4bdd6c3e164c953d01c2c0c3222f7274f78eff3fd483daddb41e
   https://github.com/goreleaser/goreleaser/releases/download/v1.18.2/goreleaser_Windows_x86_64.zip: 4b67f9a0159dc4f6a19fdea46eda506d58efe9e9d01aebc6ee39c9e9c14f9715
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_darwin_amd64.tar.gz: 728c5d02903df68cdd5de5c6199d2e37a586dc8efb4843015a19628d519e5991
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_darwin_arm64.tar.gz: c05d3d33b282c9de4a3bdb2306851ed246e34c01dd3815af39163ede95dd788a
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_linux_386.tar.gz: 75679e399c614f187b83473eae75ea8209bfed8c4057dfe58fc348b6365fda4f
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_linux_amd64.tar.gz: bc6ace0d37459f5f4f1f3949590e4e7975581ba4dedaf7ba978288ae968c7228
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_linux_arm64.tar.gz: 2f8775448c42e9865a969f8227763db01ad6cde5898646619ccdaea7c06d4434
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_windows_386.tar.gz: 69371731a5b010671042ebd968c93d5966a7a34fc76d9694d41acce14e4de81b
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_windows_amd64.tar.gz: 57f0935ec5933c32dfdc659373f2ea033cc55a77e4a6140699f9f96945f58aa7
+  https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_windows_arm64.tar.gz: 0293cc52a79d73414a7b94927e81bc9d000a547bd9c3a5ba8c9455af00b636bc
   https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.darwin.x86_64.tar.xz: 7d3730694707605d6e60cec4efcb79a0632d61babc035aa16cda1b897536acf5
   https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.aarch64.tar.xz: 179c579ef3481317d130adebede74a34dbbc2df961a70916dd4039ebf0735fae
+  https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.armv6hf.tar.xz: 03deed9ded9dd66434ccf9649815bcde7d275d6c9f6dcf665b83391673512c75
   https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.x86_64.tar.xz: 700324c6dd0ebea0117591c6cc9d7350d9c7c5c287acbad7630fa17b1d4d9e2f
   https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.zip: ae58191b1ea4ffd9e5b15da9134146e636440302ce3e2f46863e8d71c8be1bbb
   https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.6.2/aws-iam-authenticator_0.6.2_darwin_amd64: aff7c43db56b963650847a800f7ca30da296a6e4d6eed601e89787aaf524c800
@@ -1312,8 +1364,10 @@ url_checksums:
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_darwin_arm64.tar.gz: d7e8945efcd062c5bcf6e2e42d7a19c71fb26a128640aba168ea6be8d0ba2767
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_freebsd_386.tar.gz: fc1d6abd3ff4dd07e38e949dc974f63e1b49fa0d972b23da30a9a7e4bf8702c3
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_freebsd_amd64.tar.gz: fda6302772bca3b938907527450f662193700916d175ccb265e9dc40515a9d91
+  https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_freebsd_arm.tar.gz: 99e2a80d623b16df85428ad2f8a6c19e565f3e044aa44c9979e4cf4508eb574b
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_386.tar.gz: cb49d4830a1f22b8fa7518eeb590bd24b4d38d238449715a03c39b6621d8da2b
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_amd64.tar.gz: 79ccca7829e22748ce7fc26efe36f408de23baa0fbb2f38250160afa966967ac
+  https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_arm.tar.gz: 6789f11d6bc91c43fd56928a462c584f2aeffc6051d288f4743c3e38c5ac76b4
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_arm64.tar.gz: 8ab5ff97269fd3b7b9a5d2e765ecf60acbbf0360493cc49fbbf275696a7b8b2d
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_mips.tar.gz: 479f50cf3279b749cf394a327b41de03584dab6c749557b7e9aff3007c1a29d9
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_mips64le.tar.gz: 73134199e1f84742f8191e928717d5a3fa6d88cd38ea88303e3c2cf7ba7c6bfb
@@ -1324,6 +1378,7 @@ url_checksums:
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_linux_s390x.tar.gz: beee2301131654728f76292285165b4dae0711e0520f8d7e2f2720acce890b92
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_netbsd_386.tar.gz: 0c1d932b5b6dde9466fcb31fe262648574bec8b3f884a9af9c832a141d304e40
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_netbsd_amd64.tar.gz: 6f7614fdcb90909b35aaca51131e500e153fe1cbc791de04186424377372944e
+  https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_netbsd_arm.tar.gz: 274feed25f352ae447011c59d60aa298abe145af6c3313570f3bcda577cff09d
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_openbsd_386.tar.gz: 7e19df23a58396e11e2de5eff123778997fb9b30f4b77c3c26c46cfc9d5e27c5
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_openbsd_amd64.tar.gz: 3e7f01e4d1e1a43595d954a837052d5df2a0bf4eb1d76339d6ad01fb12cf62cf
   https://github.com/mikefarah/yq/releases/download/v4.33.3/yq_windows_386.zip: 368d72592f3576e9221524e83eb6b926c52fe65dc112ee16b14aee85900a6ddf
@@ -1332,6 +1387,7 @@ url_checksums:
   https://github.com/mvdan/gofumpt/releases/download/v0.5.0/gofumpt_v0.5.0_darwin_arm64: f2df95d5fad8498ad8eeb0be8abdb8bb8d05e8130b332cb69751dfd090fabac4
   https://github.com/mvdan/gofumpt/releases/download/v0.5.0/gofumpt_v0.5.0_linux_386: 2381adc51631aed60df44720c8cf5ddc5651fe5833031af9bbca2a8445496d0a
   https://github.com/mvdan/gofumpt/releases/download/v0.5.0/gofumpt_v0.5.0_linux_amd64: 759c6ab56bfbf62cafb35944aef1e0104a117e0aebfe44816fd79ef4b28521e4
+  https://github.com/mvdan/gofumpt/releases/download/v0.5.0/gofumpt_v0.5.0_linux_arm: 454232993e5b1bf3aa4d5a0f2f5a1ef79f963c450a44372e4e219c5a551bcda2
   https://github.com/mvdan/gofumpt/releases/download/v0.5.0/gofumpt_v0.5.0_linux_arm64: fba20ffd06606c89a500e3cc836408a09e4767e2f117c97724237ae4ecadf82e
   https://github.com/mvdan/gofumpt/releases/download/v0.5.0/gofumpt_v0.5.0_windows_386.exe: 37ee5acbfb5bb914a1fe3f89fe9f0f60f462fa71912e6a782bdd6d2d14b29a1d
   https://github.com/mvdan/gofumpt/releases/download/v0.5.0/gofumpt_v0.5.0_windows_amd64.exe: c9ca0a8a95c2ead0a009a349d5a326e385f5f15a96b084e11c4a7c1cb86b694b
@@ -1339,6 +1395,7 @@ url_checksums:
   https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_darwin_arm64: 633f242246ee0a866c5f5df25cbf61b6af0d5e143555aca32950059cf13d91e0
   https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_386: 9d771620e94f7834ebff12859dbeea0a160fcfab0ba3a2301cab258b6af3fd7d
   https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_amd64: 5741a02a641de7e56b8da170e71a97e58050d66a3cf485fb268d6a5a8bb74afb
+  https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_arm: 4bff0195b081ab09e14f8a118e1e2183c4aaca8566db2d1c287c9c990bf43919
   https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_linux_arm64: fb1cf0af3dbe9aac7d98e38e3c7426765208ecfe23cb2da51037bb234776fd70
   https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_windows_386.exe: 3753abfaca1beaf80a81e084c7947e60e2a08076270950d76197f4997fc122d0
   https://github.com/mvdan/sh/releases/download/v3.6.0/shfmt_v3.6.0_windows_amd64.exe: 18122d910ba434be366588f37c302c309cde4ca5403f93285254a3cf96839d01
@@ -1363,13 +1420,6 @@ url_checksums:
   https://github.com/protocolbuffers/protobuf/releases/download/v23.0/protoc-23.0-osx-x86_64.zip: 0506eac95bf3ca8fc944a862e90ab82079426633eb70c6eeb52eb4f6fb06165d
   https://github.com/protocolbuffers/protobuf/releases/download/v23.0/protoc-23.0-win32.zip: d235925e15b3ab427660a3fb2b89af9410e1c29f4ded4201c59ab6df31c71c91
   https://github.com/protocolbuffers/protobuf/releases/download/v23.0/protoc-23.0-win64.zip: 031f00a9b46ce9a2253ee681ff05d43b8f842780cac4e9f5eb3c9a3a61a33e3e
-  https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_darwin_amd64: 1c43f6abde8f4d21d9866812b08514e6ffaa6be8bf9583dbf97d95ac6af87253
-  https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_darwin_arm64: f8b41d087ba006afb5f262c952295d6d7cd5c0fb576fd3d25695a708ad9c7c85
-  https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_386: 7c75e13b062ebbe1ea09120f5ca03556895482ea92c545c13148407005eb1a66
-  https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_amd64: dcf865a715028d3a61e2fec09f2a0beaeb7ff10cde32e096bf94aeb9a6eb4f02
-  https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_arm64: 8461bbb13ba23f4333dc99d96bf7a24c283cd7683e746acf639d80bbd828926a
-  https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_windows_386.exe: 3b30897fb08b49e023b134119aafd9d9777ccd5586b3b565805ec8fbd8cbedf8
-  https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_windows_amd64.exe: 97f0e617977c5518cc92d9982c894eccaeb4c64fa9ae9577e606d2780e66f10b
   https://github.com/skeema/skeema/releases/download/v1.10.0/skeema_1.10.0_linux_amd64.tar.gz: c79c64bf448e61ac448b47c881a1b4970e40ff6bebde80b870a269d2fba4a26d
   https://github.com/skeema/skeema/releases/download/v1.10.0/skeema_1.10.0_linux_arm64.tar.gz: 0ece242c0c54865a5b9e0cc2bdda3662605fb06e4385728cae76470bea5788af
   https://github.com/skeema/skeema/releases/download/v1.10.0/skeema_1.10.0_mac_amd64.tar.gz: 9a3ae2881f25c700d14259af11bb3347feb650fec165347ae48c84feab334925
@@ -1382,17 +1432,34 @@ url_checksums:
   https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_darwin_amd64.tar.gz: 9e1a31aa3e330f70bb84bab501177250eea7c79f7ea378c27a5889c0ce79fbd6
   https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_darwin_arm64.tar.gz: 4096ff9824250df6341b4acd16e523ab69efb6b6318441fb1b20147128fce336
   https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_linux_amd64.tar.gz: 3fc9ad405a0011e7b7c295c1798ffd3d435e673af26ab753385087753d8e1e32
+  https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_linux_arm.tar.gz: 33c72b4cb322e8ea965001ba4c5fd77d15f6a7259325ebe981748e9c84d8b25f
   https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_linux_arm64.tar.gz: 0e8eef54b16f1d5f5fa45de77a79d19fd2e538ff2f231bee013f4e18aa70911a
   https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_windows_amd64.tar.gz: ef662c0ceb1422538996ca3cb74df10c7894c3591e1fa2471dd189d5e6afb00c
+  https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_windows_arm.tar.gz: 067966fcaadc26dad84d6243a532b47a99def893a1d82d0898ab631baeedd33d
   https://github.com/stern/stern/releases/download/v1.25.0/stern_1.25.0_windows_arm64.tar.gz: fa2d2329613e497685b55d4d179b6255e092b8ae434f48fececd8dc941d86722
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Darwin-x86_64.tar.gz: 98ff342d0cd307ab136652bd61cd174f4b7a1fe0eb0cb23ea35885ef84f14857
   https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Linux-x86_64.tar.gz: 50e53589b95e2435e26de01de8eac6af6ae6980b1cacf1e0ad319b7644f16b3b
+  https://go.dev/dl/go1.20.4.darwin-amd64.tar.gz: 242b099b5b9bd9c5d4d25c041216bc75abcdf8e0541aec975eeabcbce61ad47f
+  https://go.dev/dl/go1.20.4.darwin-arm64.tar.gz: 61bd4f7f2d209e2a6a7ce17787fc5fea52fb11cc9efb3d8471187a8b39ce0dc9
+  https://go.dev/dl/go1.20.4.freebsd-386.tar.gz: 66b1646786304553c5f3208d4b5ed4b3f227293728bfa5c7b5d9a3c5fa1312cb
+  https://go.dev/dl/go1.20.4.freebsd-amd64.tar.gz: 24ee729660372fb408c34a11284daa6e17e43e1db4a5bee2a96b4b6d291edfc5
+  https://go.dev/dl/go1.20.4.linux-386.tar.gz: 5dfa3db9433ef6a2d3803169fb4bd2f4505414881516eb9972d76ab2e22335a7
+  https://go.dev/dl/go1.20.4.linux-amd64.tar.gz: 698ef3243972a51ddb4028e4a1ac63dc6d60821bf18e59a807e051fee0a385bd
+  https://go.dev/dl/go1.20.4.linux-arm64.tar.gz: 105889992ee4b1d40c7c108555222ca70ae43fccb42e20fbf1eebb822f5e72c6
+  https://go.dev/dl/go1.20.4.linux-armv6l.tar.gz: 0b75ca23061a9996840111f5f19092a1bdbc42ec1ae25237ed2eec1c838bd819
+  https://go.dev/dl/go1.20.4.linux-ppc64le.tar.gz: 8c6f44b96c2719c90eebabe2dd866f9c39538648f7897a212cac448587e9a408
+  https://go.dev/dl/go1.20.4.linux-s390x.tar.gz: 57f999a4e605b1dfa4e7e58c7dbae47d370ea240879edba8001ab33c9a963ebf
+  https://go.dev/dl/go1.20.4.windows-386.zip: 8f2c5574bb822cc02d3bad4d449e4d2a2de341663df63ad0e7cb0b650a321dab
+  https://go.dev/dl/go1.20.4.windows-amd64.zip: e7528da720f470b711fbd826814167a5fe1bc02a479ab1958dcf839a8294e6d2
+  https://go.dev/dl/go1.20.4.windows-arm64.zip: 691b292c8284f31864b998f5bef8bc6d639799dec2bc319bfbe67dc6986ae02f
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_darwin_amd64.zip: 5d8332994b86411b049391d31ad1a0785dfb470db8b9c50617de28ddb5d1f25d
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_darwin_arm64.zip: 30a2f87298ff9f299452119bd14afaa8d5b000c572f62fa64baf432e35d9dec1
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_freebsd_386.zip: 546b23de458f22f40ed80b38ce6263f07fdb2e90b54e869c8797a4df00704dad
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_freebsd_amd64.zip: b6be45b3b543421b1c5ab5513bbccb08b205159a818a17c4ef05606c66ec1204
+  https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_freebsd_arm.zip: 3bbfe96a215869fee5b809e5b1ed8bfa5dd76ea6bc7933cafb7d36ee3e60f736
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_386.zip: f802ead8d46b90e5b5ec2ef5aaf5a0438bd9a7621fcc80f192b3a93ba25d679c
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip: e079db1a8945e39b1f8ba4e513946b3ab9f32bd5a2bdf19b9b186d22c5a3d53b
+  https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_arm.zip: e03fa047d5cd093929c89e261ee0852968c92097e3d575f7b56b1cb3720c82fd
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_arm64.zip: b38f5db944ac4942f11ceea465a91e365b0636febd9998c110fbbe95d61c3b26
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_openbsd_386.zip: eaf543d89e35e8356927cc615271c99bbf0a636b7e87c015d3a433d64baa071a
   https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_openbsd_amd64.zip: b5b984e57c32e37dbc3b38adb350b4412c43b2676f90408291074c2a50d7b8f2
