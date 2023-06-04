@@ -17,12 +17,13 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 - [git-describe-semver](https://github.com/choffmeister/git-describe-semver)
 - [go](https://golang.org/) - The Go programming language
 - [go-test2action](https://github.com/willabides/go-test2action) - formats go test failures as errors in github action workflows
+- [gofmt](https://golang.org/) - Formats go code
 - [gofumpt](https://github.com/mvdan/gofumpt) - A stricter gofmt
-- [golangci-lint](https://github.com/golangci/golangci-lint) - Fast linters Runner for Go
-- [goreleaser](https://github.com/goreleaser/goreleaser) - Deliver Go binaries as fast and easily as possible
+- [golangci-lint](https://golangci-lint.run) - Fast linters Runner for Go
+- [goreleaser](https://goreleaser.com) - Deliver Go binaries as fast and easily as possible
 - [handcrafted](https://github.com/willabides/handcrafted) - lists non-generated go files in a package
 - [helm](https://helm.sh/) - The Kubernetes Package Manager
-- [helmfile](https://github.com/roboll/helmfile) - Deploy Kubernetes Helm Charts
+- [helmfile](https://helmfile.readthedocs.io) - Declaratively deploy your Kubernetes manifests, Kustomize configs, and Charts as Helm releases. Generate all-in-one manifests for use with ArgoCD.
 - [jq](https://github.com/stedolan/jq) - Command-line JSON processor
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/) - Kubernetes command line tool
 - [kubectx](https://github.com/ahmetb/kubectx) - Faster way to switch between clusters and namespaces in kubectl
@@ -38,7 +39,7 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 - [semantic-release](https://github.com/go-semantic-release/semantic-release) - semantic-release written in Go
 - [semver-next](https://github.com/WillAbides/semver-next)
 - [semver-prev](https://github.com/willabides/semver-prev)
-- [shellcheck](https://github.com/koalaman/shellcheck) - ShellCheck, a static analysis tool for shell scripts
+- [shellcheck](https://www.shellcheck.net) - ShellCheck, a static analysis tool for shell scripts
 - [shfmt](https://github.com/mvdan/sh) - A shell parser, formatter, and interpreter with bash support; includes shfmt
 - [skeema](https://github.com/skeema/skeema) - Declarative pure-SQL schema management for MySQL and MariaDB
 - [sqlc](https://github.com/kyleconroy/sqlc) - Generate type-safe code from SQL

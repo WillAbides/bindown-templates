@@ -7,7 +7,7 @@ CDPATH="" cd -- "$(dirname -- "$(dirname -- "$0")")"
 pids=()
 
 for dep in $(script/bindown dependency list); do
-    script/bindown validate "$dep" &
+    script/bindown dependency validate "$dep" &
     pids+=($!)
 done
 
