@@ -5,9 +5,11 @@ on:
 name: ci
 
 jobs:
-  validate-all:
+  ci:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
       - run: script/validate-all
       - run: script/generate --check
+      - if: github.ref == 'refs/heads/main'
+        run: script/release
