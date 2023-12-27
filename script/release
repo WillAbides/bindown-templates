@@ -20,7 +20,7 @@ bin/gh auth status >/dev/null 2>&1 || {
 # only release if bindown.yml has changed since the last release
 needs_release() {
   latest_release="$(bin/gh release view --json tagName --jq '.tagName' 2>/dev/null || true)"
-  [ -n "$latest_release" ] || return 1
+  [ -n "$latest_release" ] || return 0
   [ "$(git rev-parse "$latest_release":bindown.yml)" != "$(git rev-parse HEAD:bindown.yml)" ]
 }
 
@@ -30,6 +30,7 @@ needs_release || {
 }
 
 tag_name="$(TZ=UTC0 git show -s --format='%cd-%h' --date='format-local:%Y%m%d%H%M%S')"
+echo "Releasing $tag_name"
 git tag "$tag_name"
 git push origin "$tag_name"
 bin/gh release create "$tag_name" --title "$tag_name" --generate-notes ./bindown.yml
