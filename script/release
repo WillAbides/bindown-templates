@@ -1,0 +1,35 @@
+#!/bin/sh
+
+set -e
+
+CDPATH="" cd -- "$(dirname -- "$0")/.."
+
+script/bindown install -q gh
+
+bin/gh auth status >/dev/null 2>&1 || {
+  echo "Please run 'bin/gh auth login' and try again."
+  exit 1
+}
+
+# exit unless we are on the main branch
+[ "$(git rev-parse --abbrev-ref HEAD)" = "main" ] || {
+  echo "Not on main branch."
+  exit 1
+}
+
+# only release if bindown.yml has changed since the last release
+needs_release() {
+  latest_release="$(bin/gh release view --json tagName --jq '.tagName' 2>/dev/null || true)"
+  [ -n "$latest_release" ] || return 1
+  [ "$(git rev-parse "$latest_release":bindown.yml)" != "$(git rev-parse HEAD:bindown.yml)" ]
+}
+
+needs_release || {
+  echo "No changes since last release."
+  exit 0
+}
+
+tag_name="$(TZ=UTC0 git show -s --format='%cd-%h' --date='format-local:%Y%m%d%H%M%S')"
+git tag "$tag_name"
+git push origin "$tag_name"
+bin/gh release create "$tag_name" --title "$tag_name" --generate-notes ./bindown.yml
