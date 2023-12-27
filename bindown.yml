@@ -219,7 +219,7 @@ templates:
       - version
   fzf:
     homepage: https://github.com/junegunn/fzf
-    description: 'A command-line fuzzy finder'
+    description: A command-line fuzzy finder
     url: https://github.com/junegunn/fzf/releases/download/{{.version}}/fzf-{{.version}}-{{.os}}_{{.arch}}{{.urlSuffix}}
     archive_path: fzf{{.archivePathSuffix}}
     bin: fzf

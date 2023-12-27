@@ -13,6 +13,7 @@ bindown template-source add origin https://raw.githubusercontent.com/WillAbides/
 <!--- start usage output --->
 - [aws-iam-authenticator](https://github.com/kubernetes-sigs/aws-iam-authenticator) - A tool to use AWS IAM credentials to authenticate to a Kubernetes cluster
 - [buf](https://github.com/bufbuild/buf) - A new way of working with Protocol Buffers.
+- [fzf](https://github.com/junegunn/fzf) - A command-line fuzzy finder
 - [gh](https://github.com/cli/cli) - GitHub’s official command line tool
 - [git-describe-semver](https://github.com/choffmeister/git-describe-semver)
 - [go](https://golang.org/) - The Go programming language
