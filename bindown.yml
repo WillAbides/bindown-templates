@@ -8,6 +8,10 @@ dependencies:
     template: buf
     vars:
       version: 1.20.0
+  fzf:
+    template: fzf
+    vars:
+      version: 0.44.1
   gh:
     template: gh
     vars:
@@ -210,6 +214,55 @@ templates:
       - linux/amd64
       - linux/arm64
       - windows/amd64
+      - windows/arm64
+    required_vars:
+      - version
+  fzf:
+    homepage: https://github.com/junegunn/fzf
+    description: 'A command-line fuzzy finder'
+    url: https://github.com/junegunn/fzf/releases/download/{{.version}}/fzf-{{.version}}-{{.os}}_{{.arch}}{{.urlSuffix}}
+    archive_path: fzf{{.archivePathSuffix}}
+    bin: fzf
+    vars:
+      archivePathSuffix: ""
+      urlSuffix: .zip
+    overrides:
+      - matcher:
+          os:
+            - windows
+        dependency:
+          vars:
+            archivePathSuffix: .exe
+          substitutions:
+            arch:
+              arm: armv5
+      - matcher:
+          os:
+            - freebsd
+            - linux
+            - openbsd
+        dependency:
+          vars:
+            urlSuffix: .tar.gz
+          substitutions:
+            arch:
+              arm: armv5
+    substitutions:
+      arch:
+        arm: armv5
+    systems:
+      - darwin/amd64
+      - darwin/arm64
+      - freebsd/amd64
+      - linux/amd64
+      - linux/arm
+      - linux/arm64
+      - linux/loong64
+      - linux/ppc64le
+      - linux/s390x
+      - openbsd/amd64
+      - windows/amd64
+      - windows/arm
       - windows/arm64
     required_vars:
       - version
@@ -1338,6 +1391,19 @@ url_checksums:
   https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_windows_386.tar.gz: 69371731a5b010671042ebd968c93d5966a7a34fc76d9694d41acce14e4de81b
   https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_windows_amd64.tar.gz: 57f0935ec5933c32dfdc659373f2ea033cc55a77e4a6140699f9f96945f58aa7
   https://github.com/helmfile/helmfile/releases/download/v0.154.0/helmfile_0.154.0_windows_arm64.tar.gz: 0293cc52a79d73414a7b94927e81bc9d000a547bd9c3a5ba8c9455af00b636bc
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-darwin_amd64.zip: 99652966da0c967c05f2ef14281cdf13349c925a9bd0523da15dcaf54893efb5
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-darwin_arm64.zip: bcd04f4a27dd0290c70c595389239ecb136f544bf26e062f5a9cb2b41dda6f44
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-freebsd_amd64.tar.gz: f378ae2d778372819437a6cd520b0c7324b4e04913a2d4050294679264dd8540
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-linux_amd64.tar.gz: 73d7946f08dae8a330f4233e3eeb71c4ffc411412e3fe8488d608dde3f7a74bd
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-linux_arm64.tar.gz: 6f66207d485f9fd237e17d87f239cd3e8a388b11f6b4cca1fdf77030347cb11e
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-linux_armv5.tar.gz: 0c83cbfb33b0caddfe99ababf740d84952b6f58bb7182ada9564f3f3af47beab
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-linux_loong64.tar.gz: 2167682ab5992683ad52a17ea347a84555cb7cd52b8e950193f62b49f84233da
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-linux_ppc64le.tar.gz: c0ff3cfe4b193d1859418f5e1c478891f346e35a3d1c788a4e8da0f2bd00a977
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-linux_s390x.tar.gz: 290f2e73fcb87bf2ef5d0220b9865e45f1942b0b0492bf6039451348a50510e4
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-openbsd_amd64.tar.gz: 5c5a589c3b7d2f02957a3320eeb3af347b5dd912a3f89da6f20c804e9ca3c03d
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-windows_amd64.zip: bb8f1d47d9aea2a40b5460ee0399f406ae9081ea4e1cb532593ce5b90b9b620f
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-windows_arm64.zip: c55ab5b0ec94bef0da610945501e98f73a8d7b770770333539febe93c852ee87
+  https://github.com/junegunn/fzf/releases/download/0.44.1/fzf-0.44.1-windows_armv5.zip: 2eb595329615ed34bd3ee3825d4afff4a6668c04699f0d5b55fa0772b474ecdf
   https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.darwin.x86_64.tar.xz: 7d3730694707605d6e60cec4efcb79a0632d61babc035aa16cda1b897536acf5
   https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.aarch64.tar.xz: 179c579ef3481317d130adebede74a34dbbc2df961a70916dd4039ebf0735fae
   https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.armv6hf.tar.xz: 03deed9ded9dd66434ccf9649815bcde7d275d6c9f6dcf665b83391673512c75
